@@ -26,7 +26,7 @@ export default function NDRFPage() {
             NDRF & SDRF Tactical Deployment Priority Engine
           </h2>
           <p className="text-code-sm text-on-surface-variant">
-            Automated rescue force mobilization routing, travel ETA calculator factoring mountain road cuts, and statutory requisition authorization.
+            AI-assisted rescue force prioritization workflow, demo travel ETA routing, and officer-approved requisition workflow.
           </p>
         </div>
         <div className="flex items-center gap-2">
