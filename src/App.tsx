@@ -21,14 +21,13 @@ import AdminDashboard from './pages/admin/AdminDashboard';
 export default function App() {
   const { isAuthenticated } = useAppStore();
 
-  if (!isAuthenticated) {
-    return <OpeningAuthGateway />;
-  }
-
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/login" element={<OpeningAuthGateway />} />
+      {!isAuthenticated ? (
+        <OpeningAuthGateway />
+      ) : (
+        <Routes>
+          <Route path="/login" element={<OpeningAuthGateway />} />
 
         {/* Operational Dashboard Routes */}
         <Route path="/" element={<AppShell />}>
@@ -84,6 +83,7 @@ export default function App() {
         {/* Fallback */}
         <Route path="*" element={<Navigate to="/command" replace />} />
       </Routes>
+      )}
     </BrowserRouter>
   );
 }
