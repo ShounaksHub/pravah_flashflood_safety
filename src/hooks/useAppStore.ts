@@ -82,10 +82,10 @@ interface AppState {
 }
 
 const initialEndpoints: ApiEndpoint[] = [
-  { id: 'ep-1', name: 'IMD Radar API (Sohra)', url: 'https://api.imd.gov.in/v1/radar/shillong', status: 'CONNECTED', lastSync: '1 min ago' },
-  { id: 'ep-2', name: 'CWC Hydrology Feed (Wahrew)', url: 'https://indiawater.gov.in/api/v2/gauge/wahrew', status: 'CONNECTED', lastSync: '5 mins ago' },
-  { id: 'ep-3', name: 'State PWD Road Status', url: 'https://pwd.meghalaya.gov.in/api/status/sh-11', status: 'CONNECTED', lastSync: '12 mins ago' },
-  { id: 'ep-4', name: 'NDRF Deployment Hook', url: 'https://ndrf.gov.in/webhook/deployments', status: 'CONNECTED', lastSync: 'Just now' },
+  { id: 'ep-1', name: 'DEMO • IMD Radar API (Sohra)', url: 'https://api.imd.gov.in/v1/radar/shillong', status: 'CONNECTED', lastSync: '1 min ago' },
+  { id: 'ep-2', name: 'DEMO • CWC Hydrology Feed (Wahrew)', url: 'https://indiawater.gov.in/api/v2/gauge/wahrew', status: 'CONNECTED', lastSync: '5 mins ago' },
+  { id: 'ep-3', name: 'DEMO • State PWD Road Status', url: 'https://pwd.meghalaya.gov.in/api/status/sh-11', status: 'CONNECTED', lastSync: '12 mins ago' },
+  { id: 'ep-4', name: 'DEMO • NDRF Deployment Hook', url: 'https://ndrf.gov.in/webhook/deployments', status: 'CONNECTED', lastSync: 'Just now' },
 ];
 
 export const useAppStore = create<AppState>((set, get) => ({
