@@ -1,6 +1,6 @@
 # PRAVAH Command — Early Warning & Decision Support System
 
-> **SIH 2024 / SIH26192** | Multi-source Hydrological Early Warning & Disaster Response Coordination System  
+> **SIH 2026 / SIH26192** | Multi-source Hydrological Early Warning & Disaster Response Coordination System  
 > **District Emergency Operations Centre (EOC) — East Khasi Hills, Meghalaya**
 
 ---
@@ -34,7 +34,7 @@ The platform integrates multi-source telemetry—Automated Weather Stations (IMD
 ## 🛠️ Tech Stack
 
 - **Frontend**: React 19, TypeScript, Vite
-- **Mapping & GIS**: Leaflet, React-Leaflet, Carto Light Basemaps
+- **Mapping & GIS**: Leaflet, React-Leaflet, OpenStreetMap tiles
 - **State Management**: Zustand (real-time telemetry simulation and persistent cache)
 - **Styling**: Tailwind CSS, Utilitarian Public-Sector Command Design System (WCAG AA/AAA compliant)
 - **Icons**: Lucide React
@@ -51,8 +51,8 @@ The platform integrates multi-source telemetry—Automated Weather Stations (IMD
 
 ```bash
 # Clone the repository
-git clone https://github.com/ShounaksHub/pravah.git
-cd pravah
+git clone https://github.com/ShounaksHub/pravah_flashflood_safety.git
+cd pravah_flashflood_safety
 
 # Install dependencies
 npm install
@@ -72,12 +72,15 @@ npm run preview
 
 ---
 
-## 🏛️ Architecture & Governance
+## 🏛️ Prototype Governance & Data Status
 
-Designed to adhere to:
-- **National Disaster Management Authority (NDMA)** guidelines
-- **Common Alerting Protocol (CAP v1.2)** for disaster broadcasting
-- **Disaster Management Act 2005 (Section 30)** statutory decision protocols (AI-assisted recommendations with mandatory official sign-off)
+This repository is an **MVP / operational prototype**. The current application uses mock telemetry, simulated sensor progression, illustrative risk calculations, and demo endpoint placeholders to demonstrate the intended workflow.
+
+- Risk outputs are **prototype decision-support values**, not validated operational forecasts.
+- External IMD/CWC/PWD/NDRF ingestion and message gateways are **not connected** in this repository.
+- Alert and SitRep flows demonstrate the intended approval workflow but do not transmit real emergency messages.
+- NDRF deployment recommendations are **AI-assisted prototype recommendations**; final action remains with authorized officials.
+- CAP and statutory governance concepts are represented at workflow level and require production integration and formal validation before operational use.
 
 ---
 
