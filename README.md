@@ -9,25 +9,25 @@
 
 **PRAVAH** is an operational, geospatial decision-support command dashboard engineered for District Disaster Management Authorities (DDMA), Emergency Operations Centers (EOC), and the National Disaster Response Force (NDRF). 
 
-The platform integrates multi-source telemetry—Automated Weather Stations (IMD AWS), in-situ river gauges (CWC), geotechnical slope failure indicators, and crowd-sourced citizen reports—to provide hyper-local, explainable flash flood and landslide risk forecasting with 15-minute to 2-hour lead-time precision.
+The platform integrates multi-source telemetry—Automated Weather Stations (IMD AWS), in-situ river gauges (CWC), geotechnical slope failure indicators, and crowd-sourced citizen reports—to demonstrate hyper-local, explainable flash flood and slope-failure risk assessment with an intended 15-minute to 2-hour decision-support horizon.
 
 ---
 
 ## 🚀 Key Modules & Capabilities
 
-1. **Tactical Command Overview (`/command`)**: Unified operations center displaying live KPIs, high-risk sector alerts, and quick telemetry toggles.
-2. **Live Risk Map & GIS (`/map`)**: Full spatial GIS mapping of flood inundation extent, slope failure buffers, Doppler radar reflectivity, and IoT sensor telemetry nodes.
-3. **Flood & Slope Forecast (`/forecast`)**: 15m to 2hr projection scrubber, hydrograph danger marks (Wahrew, Umiew, Umngot), soil moisture saturation indices, and village forecast matrix.
+1. **Tactical Command Overview (`/command`)**: Unified demo operations center displaying KPIs, high-risk sector alerts, GIS context, and telemetry simulation controls.
+2. **Live Risk Map & GIS (`/map`)**: Interactive GIS view of prototype flood-risk zones, slope-risk buffers, sensor telemetry nodes, and NDRF team positions.
+3. **Flood & Slope Forecast (`/forecast`)**: 15m to 2hr projection scrubber, simulated hydrograph thresholds, soil-moisture indicators, and village forecast matrix.
 4. **Hyper-Local Risk Assessment (`/risk`)**: Explainable AI multi-criteria risk scoring factoring rainfall accumulation, DEM slope gradient, Topographic Wetness Index (TWI), and stream proximity.
-5. **NDRF Tactical Deployment Priority Engine (`/ndrf`)**: Battalion staging rosters (1st BN Guwahati, SDRF units), transit ETA calculator factoring mountain road cuts, and official statutory requisition dispatch orders.
+5. **NDRF Tactical Deployment Priority Engine (`/ndrf`)**: Demo battalion staging rosters, transit ETA context, and stateful operational-order simulation.
 6. **Relief Camp Resources & Logistics Allocation (`/resources`)**: Shelter capacity tracking, ration buffers, potable water supply tankers, and IAF air reconnaissance requisition.
 7. **Evacuation Route & Road Accessibility Matrix (`/roads`)**: Highway status tracking (SH-11 cut at Km 18, NH-40, NH-6), PWD debris clearance ETAs, and green detour corridors.
 8. **Catchment Basin & Downstream Cascade (`/catchment`)**: Upstream cloudburst runoff routing down to steep gorges and downstream floodplain early warnings (Shella & Bholaganj).
-9. **Emergency Alert & Warning Dispatch Center (`/alerts`)**: Common Alerting Protocol (CAP v1.2) compliant emergency broadcast to acoustic sirens, SMS cell broadcasts, and citizen mobile apps.
+9. **Emergency Alert & Warning Dispatch Center (`/alerts`)**: CAP-style broadcast composer that records prototype alerts and selected channels in application state.
 10. **Statutory Situation Report (SitRep) Generator (`/sitrep`)**: One-click automated situation report synthesizer conforming to NDMA & Ministry of Home Affairs (MHA) NIC formats.
-11. **Citizen & Field Officer Ground Truth Intake (`/reports`)**: Geo-tagged crowdsourced report verification queue with photo proof and direct NDRF alert escalation.
+11. **Citizen & Field Officer Ground Truth Intake (`/reports`)**: Crowdsourced/field report intake queue with local verification state and tactical review workflow.
 12. **System Feeds & IoT Telemetry Health (`/system`)**: Sensor telemetry pings, upstream API integrations (IMD, CWC, PWD), and network connectivity monitors.
-13. **Role-Based Admin Panel (`/admin`)**: Strict authenticated session control for system parameters and data feed configurations.
+13. **Role-Based Admin Panel (`/admin`)**: Demo-authenticated configuration console for endpoint placeholders and system settings.
 
 ---
 
