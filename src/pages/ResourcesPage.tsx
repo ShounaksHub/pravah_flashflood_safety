@@ -34,7 +34,7 @@ export default function ResourcesPage() {
       {dispatchedItem && (
         <div className="p-3 bg-[#dcfce7] border border-[#86efac] text-[#166534] rounded text-body-sm font-semibold flex items-center gap-2">
           <CheckCircle2 size={18} />
-          {dispatchedItem} requisition transmitted to District Supply Officer (DSO).
+          {dispatchedItem} requisition recorded in the MVP logistics workflow. No external dispatch gateway is connected.
         </div>
       )}
 
