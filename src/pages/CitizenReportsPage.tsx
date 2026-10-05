@@ -51,7 +51,7 @@ export default function CitizenReportsPage() {
             Citizen & Field Officer Geo-Tagged Ground Truth Intake
           </h2>
           <p className="text-code-sm text-on-surface-variant">
-            Crowdsourced and field ranger incident triage queue with photo verification, duplicate clustering, and direct NDRF alert escalation.
+            Crowdsourced and field ranger incident triage queue with evidence-ready verification and direct tactical escalation workflow.
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -163,7 +163,7 @@ export default function CitizenReportsPage() {
                 type="submit"
                 className="h-8 px-4 rounded bg-primary text-white font-bold text-body-sm hover:bg-blue-900 transition-colors flex items-center gap-1.5"
               >
-                <Send size={14} /> Submit Verified Report
+                <Send size={14} /> Submit Ground Report
               </button>
             </div>
           </form>
