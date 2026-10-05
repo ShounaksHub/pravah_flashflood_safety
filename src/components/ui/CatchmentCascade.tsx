@@ -12,7 +12,7 @@ export default function CatchmentCascade() {
               Catchment Cascade & Hydrological Propagation Timeline (Wahrew Catchment)
             </h3>
             <p className="text-code-sm text-on-surface-variant font-mono text-[11px]">
-              Model: 2D HEC-RAS Hydro-DEM Runoff | Validated Lead-Time Accuracy: 88.4%
+              Model: Prototype hydrological propagation simulation | Validation: Demonstration / target only
             </p>
           </div>
         </div>
@@ -35,7 +35,7 @@ export default function CatchmentCascade() {
             <div className="font-mono text-[11px] text-on-surface-variant">Inflow Surge Detected</div>
           </div>
           <div className="text-[10px] font-mono text-on-surface-variant border-t border-surface-container pt-1">
-            Sensor #A: 100% Reliability
+            Sensor #A: SIMULATED STREAM
           </div>
         </div>
 
@@ -47,7 +47,7 @@ export default function CatchmentCascade() {
           </div>
           <div className="my-2">
             <div className="text-body-sm font-bold text-on-surface">River Gauge Gorge</div>
-            <div className="font-mono text-[11px] text-on-surface font-semibold">Saturation: 82% (SMAP)</div>
+            <div className="font-mono text-[11px] text-on-surface font-semibold">Saturation: 82% (SIMULATED)</div>
             <div className="font-mono text-[11px] text-[#b45309] font-semibold">Surge Velocity: 4.2 m/s</div>
           </div>
           <div className="text-[10px] font-mono text-on-surface-variant border-t border-surface-container pt-1">
@@ -83,7 +83,7 @@ export default function CatchmentCascade() {
             <div className="text-[12px] text-on-surface-variant">Pop at Risk: 1,850 Persons</div>
           </div>
           <div className="text-[10px] font-mono text-on-surface-variant border-t border-surface-container pt-1">
-            SDMA Liaison Alert Issued
+            Downstream warning path simulated
           </div>
         </div>
       </div>
