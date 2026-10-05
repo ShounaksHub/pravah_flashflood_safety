@@ -56,7 +56,7 @@ export default function AlertsPage() {
             Multi-Channel Emergency Alert & Warning Dispatch Center
           </h2>
           <p className="text-code-sm text-on-surface-variant">
-            CAP (Common Alerting Protocol) compliant emergency broadcast to acoustic sirens, SMS gateways, WhatsApp relays, and citizen mobile apps.
+            CAP-style prototype emergency broadcast composer for acoustic sirens, SMS gateways, WhatsApp relays, and citizen mobile apps.
           </p>
         </div>
         <div className="flex items-center gap-2">
