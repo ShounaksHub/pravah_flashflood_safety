@@ -1,8 +1,7 @@
 import type { ReactNode } from 'react';
 import { useAppStore } from '../../hooks/useAppStore';
-import { ArrowRight, Home, Lock } from 'lucide-react';
+import { Home, Lock, LogOut } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { DEMO_ACCOUNTS } from '../../data/mock/demoAccounts';
 
 interface RoleGuardProps {
   children: ReactNode;
@@ -11,14 +10,13 @@ interface RoleGuardProps {
 }
 
 export default function RoleGuard({ children, routePath, requiredClearance }: RoleGuardProps) {
-  const { currentUser, login } = useAppStore();
+  const { currentUser, logout } = useAppStore();
   const navigate = useNavigate();
 
   // If user has allowedRoutes defined and current route is not allowed
   const isRestricted = currentUser && currentUser.allowedRoutes && !currentUser.allowedRoutes.includes(routePath);
 
   if (isRestricted) {
-    const recommendedAccount = DEMO_ACCOUNTS.find(a => a.allowedRoutes.includes(routePath)) || DEMO_ACCOUNTS[0];
 
     return (
       <div className="max-w-3xl mx-auto py-12 px-4 flex flex-col items-center">
@@ -64,12 +62,13 @@ export default function RoleGuard({ children, routePath, requiredClearance }: Ro
 
             <button
               onClick={() => {
-                login(recommendedAccount);
+                logout();
+                navigate('/login');
               }}
               className="w-full sm:w-auto h-9 px-5 rounded bg-[#00288e] hover:bg-blue-900 text-white text-[13px] font-bold transition-colors flex items-center justify-center gap-2 shadow-sm"
             >
-              Switch to {recommendedAccount.name.split(',')[0]} ({recommendedAccount.role === 'DISTRICT_EMERGENCY_OFFICER' ? 'DEO' : 'Admin'})
-              <ArrowRight size={15} />
+              <LogOut size={15} />
+              Switch Officer / Authenticate via Gateway
             </button>
           </div>
         </div>

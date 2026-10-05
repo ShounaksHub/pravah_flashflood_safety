@@ -27,7 +27,7 @@ export default function App() {
         <OpeningAuthGateway />
       ) : (
         <Routes>
-          <Route path="/login" element={<OpeningAuthGateway />} />
+          <Route path="/login" element={<Navigate to="/command" replace />} />
 
         {/* Operational Dashboard Routes */}
         <Route path="/" element={<AppShell />}>

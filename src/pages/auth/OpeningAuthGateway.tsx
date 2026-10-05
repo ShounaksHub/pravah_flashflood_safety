@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '../../hooks/useAppStore';
 import { DEMO_ACCOUNTS, type DemoAccount } from '../../data/mock/demoAccounts';
 import { ShieldCheck, KeyRound, User, ArrowRight, Lock, CheckCircle2, AlertTriangle, Layers } from 'lucide-react';
@@ -9,6 +10,7 @@ interface OpeningAuthGatewayProps {
 }
 
 export default function OpeningAuthGateway({ onSuccess }: OpeningAuthGatewayProps) {
+  const navigate = useNavigate();
   const { login } = useAppStore();
   const [selectedAccount, setSelectedAccount] = useState<DemoAccount>(DEMO_ACCOUNTS[0]);
   const [usernameInput, setUsernameInput] = useState('');
@@ -19,6 +21,7 @@ export default function OpeningAuthGateway({ onSuccess }: OpeningAuthGatewayProp
 
   const handleQuickLogin = (account: DemoAccount) => {
     login(account);
+    navigate('/command', { replace: true });
     if (onSuccess) onSuccess();
   };
 
@@ -33,6 +36,7 @@ export default function OpeningAuthGateway({ onSuccess }: OpeningAuthGatewayProp
 
     if (matched && (passwordInput === 'admin' || passwordInput === 'pravah@2026' || passwordInput === '123456')) {
       login(matched);
+      navigate('/command', { replace: true });
       if (onSuccess) onSuccess();
     } else {
       setLoginError('Invalid credentials. Use one of the demo usernames: "deo", "ndrf", "field", "admin" with password "admin".');
