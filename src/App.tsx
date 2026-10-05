@@ -23,6 +23,7 @@ export default function App() {
         <Route path="/" element={<AppShell />}>
           <Route index element={<Navigate to="/command" replace />} />
           <Route path="command" element={<CommandDashboard />} />
+          <Route path="dashboard" element={<CommandDashboard />} />
           <Route path="map" element={<GISMapPage />} />
           <Route path="forecast" element={<ForecastPage />} />
           <Route path="risk" element={<RiskAssessmentPage />} />
