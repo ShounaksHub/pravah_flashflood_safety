@@ -3,7 +3,7 @@ import { ShieldCheck, CheckCircle2 } from 'lucide-react';
 import SectionHeader from './SectionHeader';
 
 export default function NDRFDecisionEngine() {
-  const { deploymentRecommendations } = useAppStore();
+  const { deploymentRecommendations, ndrfTeams, dispatchNDRFTeam } = useAppStore();
 
   const priority1 = deploymentRecommendations[0];
   const priority2 = deploymentRecommendations[1];
@@ -45,10 +45,13 @@ export default function NDRFDecisionEngine() {
             </div>
             
             <div className="flex items-center gap-2 pt-1">
-              <button className="flex-1 h-7 bg-primary hover:bg-[#1e40af] text-white rounded text-[12px] font-semibold transition-colors flex items-center justify-center gap-1" onClick={() => alert('NDRF Team Dispatched via API')}>
+              <button className="flex-1 h-7 bg-primary hover:bg-[#1e40af] text-white rounded text-[12px] font-semibold transition-colors flex items-center justify-center gap-1" onClick={() => { const team = ndrfTeams.find((t) => priority1?.nearestTeam.includes(t.name)); if (team && priority1) dispatchNDRFTeam(team.id, priority1.village); }}>
                 <CheckCircle2 size={14} /> Assign Team
               </button>
-              <button className="h-7 px-2 bg-surface-container-lowest border border-outline hover:bg-surface-container rounded text-[11px] text-on-surface">
+              <button
+                className="h-7 px-2 bg-surface-container-lowest border border-outline hover:bg-surface-container rounded text-[11px] text-on-surface"
+                onClick={() => priority1 && alert(`Demo route: ${priority1.nearestTeam} → ${priority1.village}`)}
+              >
                 Nav Route
               </button>
             </div>
