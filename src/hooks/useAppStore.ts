@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import type { Sensor } from '../types/hydrology';
-import type { VillageRisk, RiskLevel } from '../types/risk';
+import type { VillageRisk } from '../types/risk';
 import type { Alert } from '../types/alerts';
 import type { CitizenReport, Road } from '../types/reports';
 import type { NDRFTeam, DeploymentRecommendation } from '../types/alerts';
@@ -10,6 +10,13 @@ import { mockAlerts, mockRoads } from '../data/mock/alerts';
 import { mockNDRFTeams, mockDeploymentRecommendations, mockCitizenReports } from '../data/mock/ndrfTeams';
 import { DEMO_ACCOUNTS, type DemoAccount } from '../data/mock/demoAccounts';
 import type { UserRole } from '../types/reports';
+import {
+  type ScenarioPhase,
+  type ScenarioMode,
+  type ScenarioStatus,
+  type ScenarioEvent,
+  applyScenarioPhase,
+} from '../data/scenarios/flashFloodScenario';
 
 export interface ApiEndpoint {
   id: string;
@@ -20,6 +27,23 @@ export interface ApiEndpoint {
 }
 
 interface AppState {
+  // Scenario Simulator State Machine
+  scenarioMode: ScenarioMode;
+  scenarioStatus: ScenarioStatus;
+  scenarioPhase: ScenarioPhase;
+  scenarioElapsedSeconds: number;
+  scenarioEventLog: ScenarioEvent[];
+  catchmentActiveStage: number;
+
+  startScenario: (mode?: ScenarioMode) => void;
+  pauseScenario: () => void;
+  resumeScenario: () => void;
+  advanceScenario: () => void;
+  jumpToPhase: (phase: ScenarioPhase) => void;
+  resetScenario: () => void;
+  setScenarioMode: (mode: ScenarioMode) => void;
+  setCatchmentActiveStage: (stage: number) => void;
+
   // Sensor data
   sensors: Sensor[];
   updateSensors: (sensors: Sensor[]) => void;
@@ -89,6 +113,15 @@ const initialEndpoints: ApiEndpoint[] = [
   { id: 'ep-3', name: 'DEMO • State PWD Road Status', url: 'https://pwd.meghalaya.gov.in/api/status/sh-11', status: 'CONNECTED', lastSync: '12 mins ago' },
   { id: 'ep-4', name: 'DEMO • NDRF Deployment Hook', url: 'https://ndrf.gov.in/webhook/deployments', status: 'CONNECTED', lastSync: 'Just now' },
 ];
+
+let scenarioIntervalId: ReturnType<typeof setInterval> | null = null;
+
+const initialSensorsSnapshot = JSON.stringify(mockSensors);
+const initialVillagesSnapshot = JSON.stringify(mockVillages);
+const initialAlertsSnapshot = JSON.stringify(mockAlerts);
+const initialRoadsSnapshot = JSON.stringify(mockRoads);
+const initialNDRFTeamsSnapshot = JSON.stringify(mockNDRFTeams);
+const initialRecommendationsSnapshot = JSON.stringify(mockDeploymentRecommendations);
 
 export const useAppStore = create<AppState>((set, get) => ({
   sensors: mockSensors,
@@ -178,38 +211,262 @@ export const useAppStore = create<AppState>((set, get) => ({
     });
   },
 
-  isSimulating: true,
-  simulationPhase: 0,
-  startSimulation: () => set({ isSimulating: true }),
-  stopSimulation: () => set({ isSimulating: false }),
-  advanceSimulation: () => {
+  // Scenario State Machine
+  scenarioMode: 'GUIDED',
+  scenarioStatus: 'IDLE',
+  scenarioPhase: 0,
+  scenarioElapsedSeconds: 0,
+  scenarioEventLog: [
+    {
+      id: 'evt-init',
+      timestamp: new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }),
+      timeOffsetSec: 0,
+      phase: 0,
+      title: 'Operational Baseline Initialized',
+      detail: 'Multi-source telemetry network operational • East Khasi Hills EOC monitoring active',
+      type: 'system',
+    },
+  ],
+  catchmentActiveStage: 0,
+
+  startScenario: (mode) => {
+    if (scenarioIntervalId) {
+      clearInterval(scenarioIntervalId);
+      scenarioIntervalId = null;
+    }
+
+    const currentMode = mode || get().scenarioMode;
+    const isFresh = get().scenarioPhase === 0 && get().scenarioElapsedSeconds === 0;
+
+    let currentState = get();
+    if (isFresh) {
+      const result = applyScenarioPhase(0, currentState, 0);
+      set({
+        sensors: result.sensors,
+        villages: result.villages,
+        alerts: result.alerts,
+        roads: result.roads,
+        ndrfTeams: result.ndrfTeams,
+        deploymentRecommendations: result.deploymentRecommendations,
+        catchmentActiveStage: 0,
+        scenarioEventLog: [...result.newEvents, ...currentState.scenarioEventLog].slice(0, 50),
+        lastSync: new Date().toISOString(),
+      });
+      currentState = get();
+    }
+
+    set({
+      scenarioMode: currentMode,
+      scenarioStatus: 'RUNNING',
+    });
+
+    if (currentMode === 'GUIDED') {
+      scenarioIntervalId = setInterval(() => {
+        const state = get();
+        if (state.scenarioStatus !== 'RUNNING') return;
+
+        const newElapsed = state.scenarioElapsedSeconds + 1;
+        const currentPhase = state.scenarioPhase;
+
+        let targetPhase: ScenarioPhase = currentPhase;
+        if (currentPhase === 0 && newElapsed >= 5) {
+          targetPhase = 1;
+        } else if (currentPhase === 1 && newElapsed >= 15) {
+          targetPhase = 2;
+        } else if (currentPhase === 2 && newElapsed >= 25) {
+          targetPhase = 3;
+        } else if (currentPhase === 3 && newElapsed >= 35) {
+          if (scenarioIntervalId) {
+            clearInterval(scenarioIntervalId);
+            scenarioIntervalId = null;
+          }
+          set({
+            scenarioStatus: 'COMPLETED',
+            scenarioElapsedSeconds: 35,
+            lastSync: new Date().toISOString(),
+          });
+          return;
+        }
+
+        if (targetPhase !== currentPhase) {
+          const result = applyScenarioPhase(targetPhase, state, newElapsed);
+          set({
+            scenarioPhase: targetPhase,
+            scenarioElapsedSeconds: newElapsed,
+            sensors: result.sensors,
+            villages: result.villages,
+            alerts: result.alerts,
+            roads: result.roads,
+            ndrfTeams: result.ndrfTeams,
+            deploymentRecommendations: result.deploymentRecommendations,
+            catchmentActiveStage: targetPhase,
+            scenarioEventLog: [...result.newEvents, ...state.scenarioEventLog].slice(0, 50),
+            lastSync: new Date().toISOString(),
+          });
+        } else {
+          set({ scenarioElapsedSeconds: newElapsed });
+        }
+      }, 1000);
+    }
+  },
+
+  pauseScenario: () => {
+    if (scenarioIntervalId) {
+      clearInterval(scenarioIntervalId);
+      scenarioIntervalId = null;
+    }
+    set({ scenarioStatus: 'PAUSED' });
+  },
+
+  resumeScenario: () => {
+    const { scenarioMode } = get();
+    set({ scenarioStatus: 'RUNNING' });
+
+    if (scenarioIntervalId) {
+      clearInterval(scenarioIntervalId);
+      scenarioIntervalId = null;
+    }
+
+    if (scenarioMode === 'GUIDED') {
+      scenarioIntervalId = setInterval(() => {
+        const state = get();
+        if (state.scenarioStatus !== 'RUNNING') return;
+
+        const newElapsed = state.scenarioElapsedSeconds + 1;
+        const currentPhase = state.scenarioPhase;
+
+        let targetPhase: ScenarioPhase = currentPhase;
+        if (currentPhase === 0 && newElapsed >= 5) {
+          targetPhase = 1;
+        } else if (currentPhase === 1 && newElapsed >= 15) {
+          targetPhase = 2;
+        } else if (currentPhase === 2 && newElapsed >= 25) {
+          targetPhase = 3;
+        } else if (currentPhase === 3 && newElapsed >= 35) {
+          if (scenarioIntervalId) {
+            clearInterval(scenarioIntervalId);
+            scenarioIntervalId = null;
+          }
+          set({
+            scenarioStatus: 'COMPLETED',
+            scenarioElapsedSeconds: 35,
+            lastSync: new Date().toISOString(),
+          });
+          return;
+        }
+
+        if (targetPhase !== currentPhase) {
+          const result = applyScenarioPhase(targetPhase, state, newElapsed);
+          set({
+            scenarioPhase: targetPhase,
+            scenarioElapsedSeconds: newElapsed,
+            sensors: result.sensors,
+            villages: result.villages,
+            alerts: result.alerts,
+            roads: result.roads,
+            ndrfTeams: result.ndrfTeams,
+            deploymentRecommendations: result.deploymentRecommendations,
+            catchmentActiveStage: targetPhase,
+            scenarioEventLog: [...result.newEvents, ...state.scenarioEventLog].slice(0, 50),
+            lastSync: new Date().toISOString(),
+          });
+        } else {
+          set({ scenarioElapsedSeconds: newElapsed });
+        }
+      }, 1000);
+    }
+  },
+
+  advanceScenario: () => {
     const state = get();
-    const phase = Math.min(state.simulationPhase + 1, 2);
+    const nextPhase = (Math.min(state.scenarioPhase + 1, 3)) as ScenarioPhase;
+    const phaseOffsetSec = nextPhase === 1 ? 5 : nextPhase === 2 ? 15 : 25;
+    const result = applyScenarioPhase(nextPhase, state, phaseOffsetSec);
 
-    // Simulate sensor changes
-    const sensors = state.sensors.map((s) => {
-      let delta = (Math.random() - 0.3) * 3;
-      if (phase >= 1) delta = Math.abs(delta) * (1 + phase * 0.5);
-      const newValue = Math.max(0, +(s.value + delta).toFixed(1));
-      const newStatus = newValue > s.threshold * 0.9 ? 'warning' as const : newValue > s.threshold ? 'warning' as const : 'online' as const;
-      return { ...s, previousValue: s.value, value: newValue, status: newStatus, updatedAt: new Date().toISOString() };
+    set({
+      scenarioPhase: nextPhase,
+      scenarioElapsedSeconds: phaseOffsetSec,
+      scenarioStatus: nextPhase === 3 ? 'COMPLETED' : state.scenarioStatus === 'IDLE' ? 'PAUSED' : state.scenarioStatus,
+      sensors: result.sensors,
+      villages: result.villages,
+      alerts: result.alerts,
+      roads: result.roads,
+      ndrfTeams: result.ndrfTeams,
+      deploymentRecommendations: result.deploymentRecommendations,
+      catchmentActiveStage: nextPhase,
+      scenarioEventLog: [...result.newEvents, ...state.scenarioEventLog].slice(0, 50),
+      lastSync: new Date().toISOString(),
     });
+  },
 
-    // Simulate village risk changes
-    const villages = state.villages.map((v) => {
-      const boost = phase * 0.05;
-      const newFlood = Math.min(0.99, v.floodProbability + (Math.random() - 0.3) * 0.03 + boost);
-      const newSlope = Math.min(0.99, v.slopeProbability + (Math.random() - 0.3) * 0.02 + boost * 0.5);
-      const combined = Math.max(newFlood, newSlope) * 0.7 + Math.min(newFlood, newSlope) * 0.3;
-      let riskLevel: RiskLevel = 'LOW';
-      if (combined >= 0.7) riskLevel = 'VERY_HIGH';
-      else if (combined >= 0.5) riskLevel = 'HIGH';
-      else if (combined >= 0.3) riskLevel = 'MEDIUM';
-      const leadTime = Math.max(15, Math.round(180 * (1 - combined * 0.8)));
-      return { ...v, floodProbability: +newFlood.toFixed(2), slopeProbability: +newSlope.toFixed(2), combinedScore: +combined.toFixed(2), riskLevel, leadTimeMinutes: leadTime, lastUpdated: new Date().toISOString() };
+  jumpToPhase: (phase: ScenarioPhase) => {
+    const state = get();
+    const phaseOffsetSec = phase === 0 ? 0 : phase === 1 ? 5 : phase === 2 ? 15 : 25;
+    const result = applyScenarioPhase(phase, state, phaseOffsetSec);
+
+    set({
+      scenarioPhase: phase,
+      scenarioElapsedSeconds: phaseOffsetSec,
+      scenarioStatus: phase === 3 ? 'COMPLETED' : state.scenarioStatus === 'IDLE' ? 'PAUSED' : state.scenarioStatus,
+      sensors: result.sensors,
+      villages: result.villages,
+      alerts: result.alerts,
+      roads: result.roads,
+      ndrfTeams: result.ndrfTeams,
+      deploymentRecommendations: result.deploymentRecommendations,
+      catchmentActiveStage: phase,
+      scenarioEventLog: [...result.newEvents, ...state.scenarioEventLog].slice(0, 50),
+      lastSync: new Date().toISOString(),
     });
+  },
 
-    set({ sensors, villages, simulationPhase: phase, lastSync: new Date().toISOString() });
+  resetScenario: () => {
+    if (scenarioIntervalId) {
+      clearInterval(scenarioIntervalId);
+      scenarioIntervalId = null;
+    }
+
+    set({
+      sensors: JSON.parse(initialSensorsSnapshot),
+      villages: JSON.parse(initialVillagesSnapshot),
+      alerts: JSON.parse(initialAlertsSnapshot),
+      roads: JSON.parse(initialRoadsSnapshot),
+      ndrfTeams: JSON.parse(initialNDRFTeamsSnapshot),
+      deploymentRecommendations: JSON.parse(initialRecommendationsSnapshot),
+      scenarioStatus: 'IDLE',
+      scenarioPhase: 0,
+      scenarioElapsedSeconds: 0,
+      catchmentActiveStage: 0,
+      scenarioEventLog: [
+        {
+          id: `evt-reset-${Date.now()}`,
+          timestamp: new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }),
+          timeOffsetSec: 0,
+          phase: 0,
+          title: 'Simulation Reset to Baseline',
+          detail: 'Pristine mock telemetry restored • Baseline monitoring active across East Khasi Hills',
+          type: 'system',
+        },
+      ],
+      lastSync: new Date().toISOString(),
+    });
+  },
+
+  setScenarioMode: (mode: ScenarioMode) => {
+    set({ scenarioMode: mode });
+  },
+
+  setCatchmentActiveStage: (stage: number) => {
+    set({ catchmentActiveStage: stage });
+  },
+
+  // Backward compatibility aliases
+  isSimulating: false,
+  simulationPhase: 0,
+  startSimulation: () => get().startScenario(),
+  stopSimulation: () => get().pauseScenario(),
+  advanceSimulation: () => {
+    get().advanceScenario();
   },
 
   isOnline: true,

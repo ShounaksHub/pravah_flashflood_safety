@@ -4,13 +4,14 @@ import { AlertTriangle, Info, Share2, Megaphone, CheckCircle2, Volume2 } from 'l
 import type { Alert } from '../../types/alerts';
 
 export default function SectorRiskAnalysis() {
-  const { villages, addAlert, currentUser } = useAppStore();
+  const { villages, addAlert, currentUser, sensors } = useAppStore();
   const [sirenActive, setSirenActive] = useState(false);
   const [sdmaRelayed, setSdmaRelayed] = useState(false);
   const [actionRecorded, setActionRecorded] = useState<string | null>(null);
   
   // Use Mawsynram as the critical analysis target
   const target = villages.find(v => v.id === 'V001') || villages[0];
+  const mawsynramRainSensor = sensors.find(s => s.id === 'RS-01' || s.name.toLowerCase().includes('mawsynram'));
 
   const handleIssueRedAlert = () => {
     const newAlert: Alert = {
@@ -53,6 +54,11 @@ export default function SectorRiskAnalysis() {
           Evacuation Advisory
         </span>
       </div>
+      <div className="px-3 pb-2 pt-1 bg-surface-container-low border-b border-outline-variant">
+        <p className="font-mono text-[10px] text-on-surface-variant leading-tight">
+          PRAVAH Explainable Prototype Risk Engine • Dynamic Telemetry Computation
+        </p>
+      </div>
 
       <div className="p-3 flex flex-col gap-3">
         {sirenActive && (
@@ -88,8 +94,18 @@ export default function SectorRiskAnalysis() {
           </div>
           <div className="p-2 bg-surface-container-low rounded border border-outline-variant flex flex-col">
             <span className="text-[10px] font-bold uppercase tracking-wider text-on-surface-variant">Rainfall Rate (AWS)</span>
-            <span className="font-mono text-[20px] text-primary font-bold">142 mm/6h</span>
-            <span className="font-mono text-[10px] text-primary font-semibold">Cloudburst Threshold</span>
+            <span className="font-mono text-[20px] text-primary font-bold">
+              {mawsynramRainSensor ? `${mawsynramRainSensor.value} mm/hr` : '42 mm/hr'}
+            </span>
+            <span className={`font-mono text-[10px] font-semibold ${
+              (mawsynramRainSensor?.value || 0) >= 100 
+                ? 'text-error font-bold' 
+                : (mawsynramRainSensor?.value || 0) >= 60 
+                ? 'text-[#b45309]' 
+                : 'text-primary'
+            }`}>
+              {(mawsynramRainSensor?.value || 0) >= 100 ? 'Cloudburst Exceeded' : (mawsynramRainSensor?.value || 0) >= 60 ? 'Intense Downpour' : 'Steady Inundation'}
+            </span>
           </div>
           <div className="p-2 bg-surface-container-low rounded border border-outline-variant flex flex-col">
             <span className="text-[10px] font-bold uppercase tracking-wider text-on-surface-variant">Est. Lead Time</span>

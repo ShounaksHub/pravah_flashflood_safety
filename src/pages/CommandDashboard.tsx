@@ -11,6 +11,7 @@ import RoadAccessibilityTable from '../components/ui/RoadAccessibilityTable';
 import ResourcesShelter from '../components/ui/ResourcesShelter';
 import CitizenReportsQueue from '../components/ui/CitizenReportsQueue';
 import SitRepGenerator from '../components/ui/SitRepGenerator';
+import ScenarioControlPanel from '../components/ui/ScenarioControlPanel';
 import { AlertTriangle, Activity, RefreshCw, Layers, Bell, CheckCircle } from 'lucide-react';
 import { formatRelativeTime } from '../utils/formatting';
 
@@ -33,25 +34,29 @@ export default function CommandDashboard() {
     roads: false,
   });
 
-  // Calculate KPIs
+  // Calculate KPIs dynamically from shared Zustand state
   const veryHighRiskVillages = villages.filter(v => v.riskLevel === 'VERY_HIGH');
   const highRiskVillages = villages.filter(v => v.riskLevel === 'HIGH');
   const criticalRoads = roads.filter(r => r.status === 'BLOCKED' || r.status === 'AT_RISK');
-  const warningSensors = sensors.filter(s => s.status === 'warning');
+  const warningSensors = sensors.filter(s => s.status === 'warning' || s.value >= s.threshold);
+  const dispatchedOrEnRouteTeams = ndrfTeams.filter(t => t.status === 'DEPLOYED' || t.status === 'EN_ROUTE');
   const activeAlertsList = alerts.filter(a => a.status === 'ACTIVE').sort((a, b) => new Date(b.issuedAt).getTime() - new Date(a.issuedAt).getTime());
 
   return (
     <div className="flex flex-col gap-4">
+      {/* 0. FLASH-FLOOD SCENARIO SIMULATOR (EOC Interactive Controller) */}
+      <ScenarioControlPanel />
+
       {/* 1. TOP KPI STRIP */}
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-3">
         <MetricCard
           label="Very High Risk"
           value={padZero(veryHighRiskVillages.length)}
           subtitle="Villages"
-          badge="CRITICAL"
-          badgeVariant="error"
+          badge={veryHighRiskVillages.length > 0 ? 'CRITICAL' : 'BASELINE'}
+          badgeVariant={veryHighRiskVillages.length > 0 ? 'error' : undefined}
           accentColor="var(--color-error)"
-          footer={veryHighRiskVillages.length > 0 ? `${veryHighRiskVillages[0].name} +${veryHighRiskVillages.length - 1}` : 'None'}
+          footer={veryHighRiskVillages.length > 0 ? `${veryHighRiskVillages[0].name}${veryHighRiskVillages.length > 1 ? ` +${veryHighRiskVillages.length - 1}` : ''}` : 'All Baseline'}
           footerAction="Triage →"
           onFooterClick={() => navigate('/risk')}
           pulse={veryHighRiskVillages.length > 0}
@@ -60,7 +65,7 @@ export default function CommandDashboard() {
           label="High Risk Villages"
           value={padZero(highRiskVillages.length)}
           subtitle="Sectors"
-          badge="MONITORED"
+          badge={highRiskVillages.length > 2 ? 'ELEVATED' : 'MONITORED'}
           badgeVariant="info"
           accentColor="var(--color-secondary)"
           footer={highRiskVillages.length > 0 ? `${highRiskVillages[0].name}, ...` : 'None'}
@@ -72,11 +77,12 @@ export default function CommandDashboard() {
           value={padZero(criticalRoads.length)}
           subtitle="At Risk / Cut"
           badge={`${roads.filter(r => r.status === 'BLOCKED').length} BLOCKED`}
-          badgeVariant="error"
+          badgeVariant={roads.some(r => r.status === 'BLOCKED') ? 'error' : criticalRoads.length > 0 ? 'warning' : undefined}
           accentColor="var(--color-error)"
-          footer={criticalRoads.length > 0 ? criticalRoads[0].name : 'All Clear'}
+          footer={roads.find(r => r.status === 'BLOCKED')?.name || (criticalRoads.length > 0 ? criticalRoads[0].name : 'All Passable')}
           footerAction="Detour →"
           onFooterClick={() => navigate('/roads')}
+          pulse={roads.some(r => r.status === 'BLOCKED')}
         />
         <MetricCard
           label="Sensor Triggers"
@@ -84,20 +90,24 @@ export default function CommandDashboard() {
           subtitle={`/ ${sensors.length} Gauges`}
           icon={<Activity size={16} className="text-secondary" />}
           accentColor="var(--color-tertiary)"
-          footer={warningSensors.length > 0 ? warningSensors[0].name : 'All Normal'}
+          badge={warningSensors.length > 2 ? 'ELEVATED' : warningSensors.length > 0 ? 'WARNING' : 'NORMAL'}
+          badgeVariant={warningSensors.length > 2 ? 'error' : warningSensors.length > 0 ? 'warning' : undefined}
+          footer={warningSensors.length > 0 ? `${warningSensors[0].name} (${warningSensors[0].value} ${warningSensors[0].unit})` : 'All Normal'}
           footerAction="Telemetry →"
           onFooterClick={() => navigate('/system')}
+          pulse={warningSensors.length > 0}
         />
         <MetricCard
           label="NDRF Dispatched / Ready"
-          value={padZero(ndrfTeams.length)}
-          subtitle="Units Staged"
-          badge={ndrfTeams.filter(t => t.status === 'DEPLOYED').length > 0 ? 'ACTIVE' : 'STANDBY'}
-          badgeVariant="primary"
-          accentColor="var(--color-primary)"
-          footer="Shillong & Nongstoin"
+          value={`${padZero(dispatchedOrEnRouteTeams.length)} / ${padZero(ndrfTeams.length)}`}
+          subtitle="Units Mobilized / Staged"
+          badge={dispatchedOrEnRouteTeams.length > 0 ? (dispatchedOrEnRouteTeams.some(t => t.status === 'EN_ROUTE') ? 'EN ROUTE' : 'DEPLOYED') : 'STANDBY'}
+          badgeVariant={dispatchedOrEnRouteTeams.length > 0 ? 'error' : undefined}
+          accentColor={dispatchedOrEnRouteTeams.length > 0 ? 'var(--color-error)' : 'var(--color-primary)'}
+          footer={dispatchedOrEnRouteTeams.length > 0 ? `${dispatchedOrEnRouteTeams[0].name} (${dispatchedOrEnRouteTeams[0].currentLocation})` : 'All Units Staged (Standby)'}
           footerAction="Deploy →"
           onFooterClick={() => navigate('/ndrf')}
+          pulse={dispatchedOrEnRouteTeams.length > 0}
         />
       </div>
 

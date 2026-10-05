@@ -3,20 +3,8 @@ import TopBar from './TopBar';
 import Sidebar from './Sidebar';
 import { useEffect } from 'react';
 import { useAppStore } from '../../hooks/useAppStore';
-import { SIMULATION_INTERVAL_MS } from '../../data/constants';
 
 export default function AppShell() {
-  const { isSimulating, advanceSimulation, updateLastSync } = useAppStore();
-
-  // Simulation tick
-  useEffect(() => {
-    if (!isSimulating) return;
-    const interval = setInterval(() => {
-      advanceSimulation();
-      updateLastSync();
-    }, SIMULATION_INTERVAL_MS);
-    return () => clearInterval(interval);
-  }, [isSimulating, advanceSimulation, updateLastSync]);
 
   // Online/offline detection
   useEffect(() => {

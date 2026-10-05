@@ -5,6 +5,7 @@ import 'leaflet/dist/leaflet.css';
 import { useAppStore } from '../../hooks/useAppStore';
 import { MAP_CENTER, MAP_ZOOM, RISK_COLORS } from '../../data/constants';
 import { formatTime, riskBgHex } from '../../utils/formatting';
+import { SCENARIO_PHASES_META } from '../../data/scenarios/flashFloodScenario';
 
 // Fix Leaflet icon issue
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -56,10 +57,21 @@ function MapUpdater({ center, zoom }: { center: [number, number], zoom: number }
 }
 
 export default function GISMap({ layers, center = MAP_CENTER, zoom = MAP_ZOOM }: GISMapProps) {
-  const { villages, sensors, ndrfTeams } = useAppStore();
+  const { villages, sensors, ndrfTeams, scenarioPhase } = useAppStore();
 
   return (
     <div className="relative w-full h-[480px] bg-[#dbe7ea] rounded-b overflow-hidden border-t border-outline-variant z-0">
+      {/* Scenario Phase HUD Overlay on Map */}
+      <div className="absolute top-2 right-2 z-10 pointer-events-none flex flex-col items-end gap-1">
+        <div className="px-2.5 py-1 rounded bg-[#0b1c30]/85 text-white backdrop-blur-sm text-[11px] font-mono border border-white/20 shadow-md flex items-center gap-1.5">
+          <span className={`w-2 h-2 rounded-full ${scenarioPhase >= 2 ? 'bg-[#ef4444] animate-ping' : 'bg-[#10b981]'}`} />
+          <span className="font-bold">SCENARIO: {SCENARIO_PHASES_META[scenarioPhase].label}</span>
+          <span className="text-white/60">| P{scenarioPhase}</span>
+        </div>
+        <span className="px-1.5 py-0.5 rounded bg-black/60 text-white/80 font-mono text-[9px] uppercase tracking-wider">
+          SIMULATED TELEMETRY • PROTOTYPE
+        </span>
+      </div>
       <MapContainer center={center} zoom={zoom} style={{ height: '100%', width: '100%', zIndex: 1 }} zoomControl={false}>
         <MapUpdater center={center} zoom={zoom} />
         <TileLayer
