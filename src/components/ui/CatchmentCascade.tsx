@@ -58,7 +58,7 @@ export default function CatchmentCascade() {
               Catchment Cascade & Hydrological Propagation Timeline (Wahrew Catchment)
             </h3>
             <p className="text-code-sm text-on-surface-variant font-mono text-[11px]">
-              Model: 2D HEC-RAS Hydro-DEM Runoff | Validated Lead-Time Accuracy: 88.4% • Click node to inspect
+              Model: 2D HEC-RAS Hydro-DEM Runoff | Prototype Simulation • Click node to inspect
             </p>
           </div>
         </div>

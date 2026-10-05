@@ -6,7 +6,7 @@ import { formatTime, formatRelativeTime } from '../utils/formatting';
 import { SEVERITY_COLORS } from '../data/constants';
 
 export default function AlertsPage() {
-  const { alerts, acknowledgeAlert, resolveAlert } = useAppStore();
+  const { alerts, acknowledgeAlert, resolveAlert, createAlert, currentUser } = useAppStore();
   
   const [selectedSeverity, setSelectedSeverity] = useState<'CRITICAL' | 'WARNING' | 'ADVISORY'>('CRITICAL');
   const [targetBlock, setTargetBlock] = useState('Mawsynram');
@@ -25,6 +25,23 @@ export default function AlertsPage() {
 
   const handleBroadcast = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!alertMessage.trim()) return;
+    const issuedForAll = targetBlock === 'ALL';
+    createAlert({
+      type: selectedSeverity === 'CRITICAL' ? 'EVACUATION' : 'FLASH_FLOOD',
+      severity: selectedSeverity,
+      title: `${selectedSeverity} Flood Warning — ${issuedForAll ? 'East Khasi Hills District' : targetBlock}`,
+      description: alertMessage.trim(),
+      location: issuedForAll ? 'East Khasi Hills District' : targetBlock,
+      block: issuedForAll ? 'District-wide' : `${targetBlock} Block`,
+      latitude: 25.2972,
+      longitude: 91.5822,
+      expiresAt: new Date(Date.now() + 6 * 60 * 60 * 1000).toISOString(),
+      leadTimeMinutes: selectedSeverity === 'CRITICAL' ? 35 : 60,
+      recommendedAction: selectedSeverity === 'CRITICAL' ? 'Immediate evacuation of exposed low-lying areas and activation of designated shelters.' : 'Prepare evacuation routes, move vulnerable residents, and continue monitoring.',
+      affectedPopulation: issuedForAll ? 14250 : 4200,
+      source: `PRAVAH Demo Broadcast Console${currentUser ? ` — ${currentUser.name}` : ''}`,
+    });
     setBroadcastSent(true);
     setTimeout(() => setBroadcastSent(false), 4000);
   };
@@ -39,7 +56,7 @@ export default function AlertsPage() {
             Multi-Channel Emergency Alert & Warning Dispatch Center
           </h2>
           <p className="text-code-sm text-on-surface-variant">
-            CAP (Common Alerting Protocol) compliant emergency broadcast to acoustic sirens, SMS gateways, WhatsApp relays, and citizen mobile apps.
+            CAP-style prototype emergency broadcast composer for acoustic sirens, SMS gateways, WhatsApp relays, and citizen mobile apps.
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -161,7 +178,7 @@ export default function AlertsPage() {
               {broadcastSent && (
                 <div className="p-3 bg-[#dcfce7] border border-[#86efac] text-[#166534] rounded text-body-sm font-semibold flex items-center gap-2">
                   <CheckCircle size={18} />
-                  Emergency siren and SMS broadcast dispatched to 14,250 subscribers across {targetBlock}!
+                  Demo broadcast recorded in Alert Center for {targetBlock}. Selected channels are marked for simulation only.
                 </div>
               )}
 
@@ -256,7 +273,7 @@ export default function AlertsPage() {
               </div>
 
               <div className="p-2.5 bg-surface-container rounded text-code-sm text-on-surface-variant leading-tight">
-                *Common Alerting Protocol (CAP v1.2) formatted XML payload will be signed with DDMA District Emergency Officer cryptographic credentials.
+                *Prototype note: this MVP records a CAP-style alert payload in local application state. External signing and gateway delivery are not connected.
               </div>
 
               <button

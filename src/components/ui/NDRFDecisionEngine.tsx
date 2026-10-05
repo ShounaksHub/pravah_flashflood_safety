@@ -6,15 +6,20 @@ import SectionHeader from './SectionHeader';
 
 export default function NDRFDecisionEngine() {
   const navigate = useNavigate();
-  const { deploymentRecommendations, deployNDRFTeam, currentUser } = useAppStore();
+  const { deploymentRecommendations, ndrfTeams, deployNDRFTeam, dispatchNDRFTeam, currentUser } = useAppStore();
   const [assignedTeamId, setAssignedTeamId] = useState<string | null>(null);
+  const [routeNote, setRouteNote] = useState<string | null>(null);
 
   const priority1 = deploymentRecommendations[0];
   const priority2 = deploymentRecommendations[1];
 
-  const handleAssignTeam = (teamId: string) => {
-    deployNDRFTeam(teamId, 'En Route to Mawsynram Cluster');
-    setAssignedTeamId(teamId);
+  const handleAssignTeam = (teamName: string, village?: string) => {
+    deployNDRFTeam(teamName, `En Route to ${village || 'Mawsynram Cluster'}`);
+    const team = ndrfTeams.find((t) => teamName.includes(t.name) || t.name.includes(teamName));
+    if (team) {
+      dispatchNDRFTeam(team.id, village || priority1?.village || 'Mawsynram Cluster');
+    }
+    setAssignedTeamId(teamName);
     setTimeout(() => setAssignedTeamId(null), 5000);
   };
 
@@ -64,12 +69,15 @@ export default function NDRFDecisionEngine() {
             <div className="flex items-center gap-2 pt-1">
               <button 
                 className="flex-1 h-7 bg-primary hover:bg-[#1e40af] text-white rounded text-[12px] font-semibold transition-colors flex items-center justify-center gap-1 active:scale-95 shadow-sm" 
-                onClick={() => handleAssignTeam(priority1.nearestTeam)}
+                onClick={() => handleAssignTeam(priority1.nearestTeam, priority1.village)}
               >
                 <CheckCircle2 size={14} /> Assign Team
               </button>
               <button 
-                onClick={() => navigate('/roads')}
+                onClick={() => {
+                  setRouteNote(`Demo route selected: ${priority1.nearestTeam} → ${priority1.village} (Navigating road detours)`);
+                  navigate('/roads');
+                }}
                 className="h-7 px-3 bg-surface-container-lowest border border-outline hover:bg-surface-container rounded text-[11px] text-on-surface font-semibold flex items-center gap-1 active:scale-95"
               >
                 <Navigation size={12} /> Nav Route
@@ -109,6 +117,7 @@ export default function NDRFDecisionEngine() {
           </div>
         )}
       </div>
+      {routeNote && <div className="px-3 pb-3"><div className="p-2 bg-surface-container-low border border-outline-variant rounded text-[10px] font-semibold text-on-surface-variant">{routeNote}</div></div>}
     </div>
   );
 }

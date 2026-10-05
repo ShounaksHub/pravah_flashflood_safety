@@ -34,6 +34,7 @@ interface AppState {
   addAlert: (alert: Alert) => void;
   acknowledgeAlert: (id: string) => void;
   resolveAlert: (id: string) => void;
+  createAlert: (alert: Omit<Alert, 'id' | 'issuedAt' | 'status'>) => string;
 
   // Roads
   roads: Road[];
@@ -42,6 +43,7 @@ interface AppState {
   ndrfTeams: NDRFTeam[];
   deploymentRecommendations: DeploymentRecommendation[];
   deployNDRFTeam: (teamId: string, targetLocation?: string) => void;
+  dispatchNDRFTeam: (teamId: string, village: string) => void;
 
   // Citizen reports
   citizenReports: CitizenReport[];
@@ -82,10 +84,10 @@ interface AppState {
 }
 
 const initialEndpoints: ApiEndpoint[] = [
-  { id: 'ep-1', name: 'IMD Radar API (Sohra)', url: 'https://api.imd.gov.in/v1/radar/shillong', status: 'CONNECTED', lastSync: '1 min ago' },
-  { id: 'ep-2', name: 'CWC Hydrology Feed (Wahrew)', url: 'https://indiawater.gov.in/api/v2/gauge/wahrew', status: 'CONNECTED', lastSync: '5 mins ago' },
-  { id: 'ep-3', name: 'State PWD Road Status', url: 'https://pwd.meghalaya.gov.in/api/status/sh-11', status: 'CONNECTED', lastSync: '12 mins ago' },
-  { id: 'ep-4', name: 'NDRF Deployment Hook', url: 'https://ndrf.gov.in/webhook/deployments', status: 'CONNECTED', lastSync: 'Just now' },
+  { id: 'ep-1', name: 'DEMO • IMD Radar API (Sohra)', url: 'https://api.imd.gov.in/v1/radar/shillong', status: 'CONNECTED', lastSync: '1 min ago' },
+  { id: 'ep-2', name: 'DEMO • CWC Hydrology Feed (Wahrew)', url: 'https://indiawater.gov.in/api/v2/gauge/wahrew', status: 'CONNECTED', lastSync: '5 mins ago' },
+  { id: 'ep-3', name: 'DEMO • State PWD Road Status', url: 'https://pwd.meghalaya.gov.in/api/status/sh-11', status: 'CONNECTED', lastSync: '12 mins ago' },
+  { id: 'ep-4', name: 'DEMO • NDRF Deployment Hook', url: 'https://ndrf.gov.in/webhook/deployments', status: 'CONNECTED', lastSync: 'Just now' },
 ];
 
 export const useAppStore = create<AppState>((set, get) => ({
@@ -111,6 +113,12 @@ export const useAppStore = create<AppState>((set, get) => ({
   resolveAlert: (id) => set((state) => ({
     alerts: state.alerts.map((a) => a.id === id ? { ...a, status: 'RESOLVED' as const } : a),
   })),
+  createAlert: (alert) => {
+    const id = `ALT-${Date.now().toString().slice(-8)}`;
+    const newAlert: Alert = { ...alert, id, issuedAt: new Date().toISOString(), status: 'ACTIVE' };
+    set((state) => ({ alerts: [newAlert, ...state.alerts] }));
+    return id;
+  },
 
   roads: mockRoads,
 
@@ -127,6 +135,12 @@ export const useAppStore = create<AppState>((set, get) => ({
       recommendedAction: 'Unit deployed and en route to sector',
     } : r),
   })),
+  dispatchNDRFTeam: (teamId, village) => set((state) => ({
+    ndrfTeams: state.ndrfTeams.map((team) => team.id === teamId
+      ? { ...team, status: 'EN_ROUTE' as const, assignedVillage: village, currentLocation: `En route to ${village}`, lastUpdate: new Date().toISOString() }
+      : team
+    ),
+  })),
 
   citizenReports: mockCitizenReports,
   addCitizenReport: (report) => set((state) => ({
@@ -136,7 +150,8 @@ export const useAppStore = create<AppState>((set, get) => ({
     citizenReports: state.citizenReports.map(r => r.id === id ? {
       ...r,
       status: 'VERIFIED' as const,
-      verifiedBy: verifiedBy || state.currentUser?.name || 'Verified by Officer',
+      verifiedBy: verifiedBy || state.currentUser?.name || 'Current Officer',
+      verifiedAt: new Date().toISOString(),
     } : r),
   })),
 

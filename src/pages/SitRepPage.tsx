@@ -12,12 +12,12 @@ export default function SitRepPage() {
             Statutory Situation Report (SitRep) Generator
           </h2>
           <p className="text-code-sm text-on-surface-variant">
-            Automated multi-agency operational report adhering strictly to National Disaster Management Authority (NDMA) & Ministry of Home Affairs (MHA) reporting formats.
+            Prototype multi-agency operational report draft structured for NDMA/MHA-style review. External submission remains manual in this MVP.
           </p>
         </div>
         <div className="flex items-center gap-2 font-mono text-code-sm">
           <span className="px-2.5 py-1 rounded bg-surface-container text-on-surface font-bold border border-outline">
-            NIC FORMAT 2026-A
+            PROTOTYPE FORMAT
           </span>
         </div>
       </div>
@@ -29,7 +29,7 @@ export default function SitRepPage() {
       <div className="bg-surface-container-low p-3.5 rounded border border-outline-variant flex items-center gap-3">
         <Award size={24} className="text-primary flex-shrink-0" />
         <p className="text-code-sm text-on-surface-variant leading-relaxed">
-          <strong>Statutory Compliance Note:</strong> In accordance with Section 30 of the Disaster Management Act 2005, situation reports synthesized by AI automated telemetry engines require statutory review and endorsement by the designated District Emergency Officer prior to external relay to SEC & MHA.
+          <strong>Statutory Compliance Note:</strong> MVP governance note: AI-assisted drafts require review and endorsement by the designated District Emergency Officer before any external relay.
         </p>
       </div>
     </div>

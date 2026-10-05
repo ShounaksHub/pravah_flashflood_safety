@@ -5,10 +5,13 @@ import SectionHeader from '../components/ui/SectionHeader';
 import { ShieldCheck, Truck, CheckCircle2, PhoneCall } from 'lucide-react';
 
 export default function NDRFPage() {
-  const { ndrfTeams } = useAppStore();
+  const { ndrfTeams, dispatchNDRFTeam } = useAppStore();
   const [dispatchedId, setDispatchedId] = useState<string | null>(null);
 
   const handleDispatch = (teamId: string) => {
+    const team = ndrfTeams.find((t) => t.id === teamId);
+    if (!team) return;
+    dispatchNDRFTeam(teamId, team.assignedVillage || 'priority sector');
     setDispatchedId(teamId);
     setTimeout(() => setDispatchedId(null), 3000);
   };
@@ -23,7 +26,7 @@ export default function NDRFPage() {
             NDRF & SDRF Tactical Deployment Priority Engine
           </h2>
           <p className="text-code-sm text-on-surface-variant">
-            Automated rescue force mobilization routing, travel ETA calculator factoring mountain road cuts, and statutory requisition authorization.
+            AI-assisted rescue force prioritization workflow, demo travel ETA routing, and officer-approved requisition workflow.
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -36,7 +39,7 @@ export default function NDRFPage() {
       {dispatchedId && (
         <div className="p-3 bg-[#dcfce7] border border-[#86efac] text-[#166534] rounded text-body-sm font-semibold flex items-center gap-2">
           <CheckCircle2 size={18} />
-          Official Requisition Order broadcast to {ndrfTeams.find(t => t.id === dispatchedId)?.name}! Unit status updated to EN ROUTE.
+          Official Requisition Order recorded for {ndrfTeams.find(t => t.id === dispatchedId)?.name}. Unit status updated to EN ROUTE.
         </div>
       )}
 

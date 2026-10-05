@@ -7,6 +7,7 @@ export default function SectorRiskAnalysis() {
   const { villages, addAlert, currentUser } = useAppStore();
   const [sirenActive, setSirenActive] = useState(false);
   const [sdmaRelayed, setSdmaRelayed] = useState(false);
+  const [actionRecorded, setActionRecorded] = useState<string | null>(null);
   
   // Use Mawsynram as the critical analysis target
   const target = villages.find(v => v.id === 'V001') || villages[0];
@@ -110,18 +111,25 @@ export default function SectorRiskAnalysis() {
         <div className="flex items-center gap-2 pt-1">
           <button 
             className="flex-1 h-8 bg-error hover:bg-[#991b1b] text-white rounded text-sm font-semibold transition-colors flex items-center justify-center gap-1 shadow-sm active:scale-95" 
-            onClick={handleIssueRedAlert}
+            onClick={() => {
+              handleIssueRedAlert();
+              setActionRecorded('Sector red alert recorded in Alert Center & Siren broadcasted.');
+            }}
           >
             <Megaphone size={16} /> Issue Sector Red Alert
           </button>
           <button 
-            onClick={handleRelaySDMA}
+            onClick={() => {
+              handleRelaySDMA();
+              setActionRecorded('SDMA telemetry relay recorded and sent to State EOC.');
+            }}
             className="h-8 px-3 bg-surface-container-lowest border border-outline-variant hover:bg-surface-container rounded text-sm text-on-surface transition-colors flex items-center gap-1 active:scale-95"
           >
             <Share2 size={16} /> Relay SDMA
           </button>
         </div>
       </div>
+      {actionRecorded && <div className="mx-3 mb-3 p-2 bg-[#dcfce7] border border-[#86efac] text-[#166534] rounded text-[11px] font-semibold flex items-center gap-1.5"><CheckCircle2 size={13} />{actionRecorded}</div>}
     </div>
   );
 }

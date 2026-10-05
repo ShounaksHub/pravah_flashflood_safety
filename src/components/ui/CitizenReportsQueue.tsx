@@ -38,6 +38,14 @@ export default function CitizenReportsQueue() {
               <MapPin size={10} />
               {report.location}
             </div>
+            
+            {report.photoUrl && (
+              <div className="mt-1">
+                <a href={report.photoUrl} target="_blank" rel="noreferrer" className="text-[10px] font-semibold text-primary hover:underline">
+                  View attached evidence photo
+                </a>
+              </div>
+            )}
 
             <div className="border-t border-surface-container mt-1 pt-1.5 flex items-center justify-between">
               <span className={`px-1.5 py-0.5 rounded text-[9px] font-bold uppercase

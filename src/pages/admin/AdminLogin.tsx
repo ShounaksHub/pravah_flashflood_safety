@@ -17,7 +17,7 @@ export default function AdminLogin() {
       setAdminAuthenticated(true);
       useAppStore.getState().setRole('ADMIN');
     } else {
-      setError('Invalid username or password. (Hint: demo / admin123)');
+      setError('Invalid username or password.');
     }
   };
 
@@ -29,7 +29,7 @@ export default function AdminLogin() {
             <img src="/favicon.png" alt="Pravah Logo" className="w-full h-full object-cover" />
           </div>
           <h2 className="text-[24px] font-bold text-[#003757] text-center leading-tight">System Administration</h2>
-          <p className="text-[13px] text-[#444653] font-mono mt-1">Pravah Backend Configurator</p>
+          <p className="text-[13px] text-[#444653] font-mono mt-1">Pravah Backend Configurator • DEMO AUTH</p>
         </div>
 
         <form onSubmit={handleLogin} className="flex flex-col gap-5">
