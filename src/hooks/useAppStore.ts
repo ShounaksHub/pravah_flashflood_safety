@@ -33,6 +33,7 @@ interface AppState {
   updateAlerts: (alerts: Alert[]) => void;
   acknowledgeAlert: (id: string) => void;
   resolveAlert: (id: string) => void;
+  createAlert: (alert: Omit<Alert, 'id' | 'issuedAt' | 'status'>) => string;
 
   // Roads
   roads: Road[];
@@ -40,10 +41,12 @@ interface AppState {
   // NDRF
   ndrfTeams: NDRFTeam[];
   deploymentRecommendations: DeploymentRecommendation[];
+  dispatchNDRFTeam: (teamId: string, village: string) => void;
 
   // Citizen reports
   citizenReports: CitizenReport[];
   addCitizenReport: (report: CitizenReport) => void;
+  verifyCitizenReport: (id: string) => void;
 
   // User & Auth
   isAuthenticated: boolean;
@@ -100,15 +103,33 @@ export const useAppStore = create<AppState>((set, get) => ({
   resolveAlert: (id) => set((state) => ({
     alerts: state.alerts.map((a) => a.id === id ? { ...a, status: 'RESOLVED' as const } : a),
   })),
+  createAlert: (alert) => {
+    const id = `ALT-${Date.now().toString().slice(-8)}`;
+    const newAlert: Alert = { ...alert, id, issuedAt: new Date().toISOString(), status: 'ACTIVE' };
+    set((state) => ({ alerts: [newAlert, ...state.alerts] }));
+    return id;
+  },
 
   roads: mockRoads,
 
   ndrfTeams: mockNDRFTeams,
   deploymentRecommendations: mockDeploymentRecommendations,
+  dispatchNDRFTeam: (teamId, village) => set((state) => ({
+    ndrfTeams: state.ndrfTeams.map((team) => team.id === teamId
+      ? { ...team, status: 'EN_ROUTE' as const, assignedVillage: village, currentLocation: `En route to ${village}`, lastUpdate: new Date().toISOString() }
+      : team
+    ),
+  })),
 
   citizenReports: mockCitizenReports,
   addCitizenReport: (report) => set((state) => ({
     citizenReports: [report, ...state.citizenReports],
+  })),
+  verifyCitizenReport: (id) => set((state) => ({
+    citizenReports: state.citizenReports.map((report) => report.id === id
+      ? { ...report, status: 'VERIFIED' as const, verifiedBy: state.currentUser?.name || 'Current Officer' }
+      : report
+    ),
   })),
 
   isAuthenticated: false,
