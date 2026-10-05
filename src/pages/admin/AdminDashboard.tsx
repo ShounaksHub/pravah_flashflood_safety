@@ -23,14 +23,14 @@ export default function AdminDashboard() {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-[24px] font-bold text-[#003757]">Backend Overview</h2>
-          <p className="text-[#444653] font-mono text-[13px]">System Health and Configuration</p>
+          <p className="text-[#444653] font-mono text-[13px]">System Health and Configuration • Demo Environment</p>
         </div>
         <div className="flex items-center gap-2">
           <span className="flex h-3 w-3 relative">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#006a63] opacity-75"></span>
             <span className="relative inline-flex rounded-full h-3 w-3 bg-[#006a63]"></span>
           </span>
-          <span className="text-[13px] font-bold text-[#006a63]">SYSTEM ONLINE</span>
+          <span className="text-[13px] font-bold text-[#006a63]">DEMO ENVIRONMENT ONLINE</span>
         </div>
       </div>
 
@@ -57,7 +57,7 @@ export default function AdminDashboard() {
             <h3 className="text-[#444653] text-[12px] font-bold uppercase font-mono">AI Engine Status</h3>
             <Cpu size={16} className="text-[#00288e]" />
           </div>
-          <p className="text-[20px] font-bold text-[#131b2e] mt-1">OPERATIONAL</p>
+          <p className="text-[20px] font-bold text-[#131b2e] mt-1">PROTOTYPE READY</p>
         </div>
 
         <div className="bg-white p-4 rounded-md shadow-sm border border-[#c4c5d5] border-l-4 border-l-[#ba1a1a]">
