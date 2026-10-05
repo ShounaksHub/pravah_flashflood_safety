@@ -98,7 +98,7 @@ export const useAppStore = create<AppState>((set, get) => ({
   alerts: mockAlerts,
   updateAlerts: (alerts) => set({ alerts }),
   acknowledgeAlert: (id) => set((state) => ({
-    alerts: state.alerts.map((a) => a.id === id ? { ...a, status: 'ACKNOWLEDGED' as const, acknowledgedBy: 'Current Officer', acknowledgedAt: new Date().toISOString() } : a),
+    alerts: state.alerts.map((a) => a.id === id ? { ...a, status: 'ACKNOWLEDGED' as const, acknowledgedBy: state.currentUser?.name || 'Current Officer', acknowledgedAt: new Date().toISOString() } : a),
   })),
   resolveAlert: (id) => set((state) => ({
     alerts: state.alerts.map((a) => a.id === id ? { ...a, status: 'RESOLVED' as const } : a),
