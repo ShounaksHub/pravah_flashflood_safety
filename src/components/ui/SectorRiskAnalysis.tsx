@@ -1,8 +1,10 @@
 import { useAppStore } from '../../hooks/useAppStore';
-import { AlertTriangle, Info, Share2, Megaphone } from 'lucide-react';
+import { useState } from 'react';
+import { AlertTriangle, Info, Share2, Megaphone, CheckCircle2 } from 'lucide-react';
 
 export default function SectorRiskAnalysis() {
-  const { villages } = useAppStore();
+  const { villages, createAlert } = useAppStore();
+  const [actionRecorded, setActionRecorded] = useState<string | null>(null);
   
   // Use Mawsynram as the critical analysis target
   const target = villages.find(v => v.id === 'V001') || villages[0];
@@ -60,14 +62,32 @@ export default function SectorRiskAnalysis() {
         </div>
 
         <div className="flex items-center gap-2 pt-1">
-          <button className="flex-1 h-8 bg-error hover:bg-[#991b1b] text-white rounded text-sm font-semibold transition-colors flex items-center justify-center gap-1 shadow-sm" onClick={() => alert('Evacuation Siren Triggered!')}>
+          <button className="flex-1 h-8 bg-error hover:bg-[#991b1b] text-white rounded text-sm font-semibold transition-colors flex items-center justify-center gap-1 shadow-sm" onClick={() => {
+            createAlert({
+              type: 'EVACUATION', severity: 'CRITICAL',
+              title: `Sector Red Alert — ${target.name}`,
+              description: `Prototype sector alert generated from the ${target.name} risk dossier. Review evacuation readiness immediately.`,
+              location: target.name, block: target.block,
+              latitude: target.latitude, longitude: target.longitude,
+              expiresAt: new Date(Date.now() + 2 * 60 * 60 * 1000).toISOString(),
+              leadTimeMinutes: target.leadTimeMinutes,
+              recommendedAction: `Review evacuation of exposed low-lying areas near ${target.nearestShelter}.`,
+              affectedPopulation: target.populationExposure,
+              source: 'PRAVAH Prototype Sector Analysis'
+            });
+            setActionRecorded('Sector red alert recorded in Alert Center.');
+          }}>
             <Megaphone size={16} /> Issue Sector Red Alert
           </button>
-          <button className="h-8 px-3 bg-surface-container-lowest border border-outline-variant hover:bg-surface-container rounded text-sm text-on-surface transition-colors flex items-center gap-1">
+          <button
+            className="h-8 px-3 bg-surface-container-lowest border border-outline-variant hover:bg-surface-container rounded text-sm text-on-surface transition-colors flex items-center gap-1"
+            onClick={() => setActionRecorded('SDMA relay action recorded for review.')}
+          >
             <Share2 size={16} /> Relay SDMA
           </button>
         </div>
       </div>
+      {actionRecorded && <div className="mx-3 mb-3 p-2 bg-[#dcfce7] border border-[#86efac] text-[#166534] rounded text-[11px] font-semibold flex items-center gap-1.5"><CheckCircle2 size={13} />{actionRecorded}</div>}
     </div>
   );
 }
