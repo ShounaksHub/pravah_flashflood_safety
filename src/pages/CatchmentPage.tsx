@@ -1,11 +1,23 @@
 import { useState } from 'react';
+import { useAppStore } from '../hooks/useAppStore';
 import CatchmentCascade from '../components/ui/CatchmentCascade';
 import { Droplets, Waves, ArrowDownRight, Megaphone, CheckCircle2 } from 'lucide-react';
 
 export default function CatchmentPage() {
   const [broadcastSent, setBroadcastSent] = useState(false);
+  const { createAlert } = useAppStore();
 
   const handleBroadcast = () => {
+    createAlert({
+      type: 'EVACUATION', severity: 'CRITICAL',
+      title: 'Downstream Cascade Warning — Shella & Bholaganj',
+      description: 'Prototype cascade simulation indicates downstream surge propagation from the Wahrew sub-basin. Local authorities should review evacuation readiness.',
+      location: 'Shella / Bholaganj', block: 'Downstream Floodplain',
+      latitude: 25.2114, longitude: 91.8056,
+      expiresAt: new Date(Date.now() + 2 * 60 * 60 * 1000).toISOString(),
+      leadTimeMinutes: 70, recommendedAction: 'Review downstream evacuation readiness and designated shelter activation.',
+      affectedPopulation: 1850, source: 'PRAVAH Prototype Catchment Simulation'
+    });
     setBroadcastSent(true);
     setTimeout(() => setBroadcastSent(false), 3500);
   };
@@ -33,7 +45,7 @@ export default function CatchmentPage() {
       {broadcastSent && (
         <div className="p-3 bg-[#dcfce7] border border-[#86efac] text-[#166534] rounded text-body-sm font-semibold flex items-center gap-2">
           <CheckCircle2 size={18} />
-          Pre-emptive early warning siren & SMS triggered for downstream Shella & Bholaganj sectors! (Lead time: 70 min)
+          Downstream cascade warning recorded in Alert Center for simulation. Lead time shown: 70 min.
         </div>
       )}
 
