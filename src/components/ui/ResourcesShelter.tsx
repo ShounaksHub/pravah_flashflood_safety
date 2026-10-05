@@ -1,8 +1,10 @@
+import { useNavigate } from 'react-router-dom';
 import { Warehouse } from 'lucide-react';
 import SectionHeader from './SectionHeader';
 import { mockShelters } from '../../data/mock/ndrfTeams';
 
 export default function ResourcesShelter() {
+  const navigate = useNavigate();
   return (
     <div className="bg-surface-container-lowest rounded border border-outline-variant shadow-sm flex flex-col overflow-hidden h-full">
       <SectionHeader
@@ -47,6 +49,15 @@ export default function ResourcesShelter() {
             </div>
           );
         })}
+      </div>
+      <div className="p-2 bg-surface-container-low border-t border-outline-variant flex items-center justify-between text-[11px]">
+        <span className="text-on-surface-variant font-mono">Total Relief Cap: 1,800 Beds</span>
+        <button 
+          onClick={() => navigate('/resources')} 
+          className="text-primary hover:underline font-semibold font-mono text-[11px]"
+        >
+          Manage Fleet →
+        </button>
       </div>
     </div>
   );

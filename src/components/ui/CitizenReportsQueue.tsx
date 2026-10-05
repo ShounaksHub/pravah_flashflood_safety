@@ -4,7 +4,7 @@ import SectionHeader from './SectionHeader';
 import { formatRelativeTime } from '../../utils/formatting';
 
 export default function CitizenReportsQueue() {
-  const { citizenReports } = useAppStore();
+  const { citizenReports, verifyCitizenReport, currentUser } = useAppStore();
 
   return (
     <div className="bg-surface-container-lowest rounded border border-outline-variant shadow-sm flex flex-col overflow-hidden h-full">
@@ -48,9 +48,18 @@ export default function CitizenReportsQueue() {
               </span>
               
               <div className="flex gap-1">
-                <button className="h-6 px-2 bg-surface-container-lowest border border-outline-variant hover:bg-surface-container rounded text-[10px] text-on-surface font-semibold flex items-center gap-1" onClick={() => alert('Report verified via admin token')}>
-                  <CheckCircle2 size={12} className="text-secondary" /> Verify
-                </button>
+                {report.status !== 'VERIFIED' ? (
+                  <button 
+                    className="h-6 px-2 bg-surface-container-lowest border border-outline-variant hover:bg-surface-container rounded text-[10px] text-on-surface font-semibold flex items-center gap-1 active:scale-95" 
+                    onClick={() => verifyCitizenReport(report.id, currentUser?.name)}
+                  >
+                    <CheckCircle2 size={12} className="text-secondary" /> Verify Truth
+                  </button>
+                ) : (
+                  <span className="text-[10px] text-secondary font-semibold flex items-center gap-1">
+                    <CheckCircle2 size={12} /> Verified
+                  </span>
+                )}
               </div>
             </div>
           </div>

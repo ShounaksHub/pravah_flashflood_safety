@@ -42,6 +42,8 @@ interface GISMapProps {
     sensors: boolean;
     roads: boolean;
   };
+  center?: [number, number];
+  zoom?: number;
 }
 
 // Map Updater Component to handle map centering programmatically
@@ -53,13 +55,13 @@ function MapUpdater({ center, zoom }: { center: [number, number], zoom: number }
   return null;
 }
 
-export default function GISMap({ layers }: GISMapProps) {
+export default function GISMap({ layers, center = MAP_CENTER, zoom = MAP_ZOOM }: GISMapProps) {
   const { villages, sensors, ndrfTeams } = useAppStore();
 
   return (
     <div className="relative w-full h-[480px] bg-[#dbe7ea] rounded-b overflow-hidden border-t border-outline-variant z-0">
-      <MapContainer center={MAP_CENTER} zoom={MAP_ZOOM} style={{ height: '100%', width: '100%', zIndex: 1 }} zoomControl={false}>
-        <MapUpdater center={MAP_CENTER} zoom={MAP_ZOOM} />
+      <MapContainer center={center} zoom={zoom} style={{ height: '100%', width: '100%', zIndex: 1 }} zoomControl={false}>
+        <MapUpdater center={center} zoom={zoom} />
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

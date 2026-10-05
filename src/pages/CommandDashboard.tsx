@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '../hooks/useAppStore';
 import MetricCard from '../components/ui/MetricCard';
 import SectionHeader from '../components/ui/SectionHeader';
@@ -14,7 +15,15 @@ import { AlertTriangle, Activity, RefreshCw, Layers, Bell, CheckCircle } from 'l
 import { formatRelativeTime } from '../utils/formatting';
 
 export default function CommandDashboard() {
-  const { villages, alerts, ndrfTeams, roads, sensors, acknowledgeAlert, isSimulating, advanceSimulation } = useAppStore();
+  const navigate = useNavigate();
+  const { villages, alerts, ndrfTeams, roads, sensors, acknowledgeAlert, resolveAlert, isSimulating, advanceSimulation } = useAppStore();
+
+  const [scope, setScope] = useState<'all' | 'mawsynram' | 'sohra'>('all');
+  const scopeCoords: Record<'all' | 'mawsynram' | 'sohra', { center: [number, number]; zoom: number }> = {
+    all: { center: [25.30, 91.68], zoom: 10 },
+    mawsynram: { center: [25.297, 91.582], zoom: 12 },
+    sohra: { center: [25.274, 91.732], zoom: 12 },
+  };
 
   const [layers, setLayers] = useState({
     flood: true,
@@ -44,6 +53,7 @@ export default function CommandDashboard() {
           accentColor="var(--color-error)"
           footer={veryHighRiskVillages.length > 0 ? `${veryHighRiskVillages[0].name} +${veryHighRiskVillages.length - 1}` : 'None'}
           footerAction="Triage →"
+          onFooterClick={() => navigate('/risk')}
           pulse={veryHighRiskVillages.length > 0}
         />
         <MetricCard
@@ -55,6 +65,7 @@ export default function CommandDashboard() {
           accentColor="var(--color-secondary)"
           footer={highRiskVillages.length > 0 ? `${highRiskVillages[0].name}, ...` : 'None'}
           footerAction={`List (${highRiskVillages.length}) →`}
+          onFooterClick={() => navigate('/risk')}
         />
         <MetricCard
           label="Critical Roads"
@@ -65,6 +76,7 @@ export default function CommandDashboard() {
           accentColor="var(--color-error)"
           footer={criticalRoads.length > 0 ? criticalRoads[0].name : 'All Clear'}
           footerAction="Detour →"
+          onFooterClick={() => navigate('/roads')}
         />
         <MetricCard
           label="Sensor Triggers"
@@ -74,6 +86,7 @@ export default function CommandDashboard() {
           accentColor="var(--color-tertiary)"
           footer={warningSensors.length > 0 ? warningSensors[0].name : 'All Normal'}
           footerAction="Telemetry →"
+          onFooterClick={() => navigate('/system')}
         />
         <MetricCard
           label="NDRF Dispatched / Ready"
@@ -84,6 +97,7 @@ export default function CommandDashboard() {
           accentColor="var(--color-primary)"
           footer="Shillong & Nongstoin"
           footerAction="Deploy →"
+          onFooterClick={() => navigate('/ndrf')}
         />
       </div>
 
@@ -98,14 +112,18 @@ export default function CommandDashboard() {
             >
               <div className="flex items-center gap-2 flex-wrap">
                 <label className="text-label-caps text-on-surface-variant">Scope:</label>
-                <select className="h-7 px-2 bg-surface-container-lowest border border-outline-variant rounded text-body-sm focus:outline-none focus:border-primary">
-                  <option>All Blocks (Priority Focus)</option>
-                  <option>Mawsynram C&RD Block</option>
-                  <option>Sohra (Cherrapunji) Block</option>
+                <select 
+                  value={scope} 
+                  onChange={(e) => setScope(e.target.value as any)}
+                  className="h-7 px-2 bg-surface-container-lowest border border-outline-variant rounded text-body-sm focus:outline-none focus:border-primary font-medium"
+                >
+                  <option value="all">All Blocks (Priority Focus)</option>
+                  <option value="mawsynram">Mawsynram C&RD Block</option>
+                  <option value="sohra">Sohra (Cherrapunji) Block</option>
                 </select>
                 <button 
                   onClick={advanceSimulation}
-                  className="h-7 px-2.5 rounded bg-surface-container border border-outline-variant text-code-sm hover:bg-surface-container-high transition-colors flex items-center gap-1"
+                  className="h-7 px-2.5 rounded bg-surface-container border border-outline-variant text-code-sm hover:bg-surface-container-high transition-colors flex items-center gap-1 active:scale-95"
                 >
                   <RefreshCw size={14} className={isSimulating ? 'animate-spin' : ''} />
                   Simulate Tick
@@ -129,7 +147,11 @@ export default function CommandDashboard() {
               ))}
             </div>
             
-            <GISMap layers={layers} />
+            <GISMap 
+              layers={layers} 
+              center={scopeCoords[scope].center} 
+              zoom={scopeCoords[scope].zoom} 
+            />
           </div>
 
           <CatchmentCascade />
@@ -173,13 +195,21 @@ export default function CommandDashboard() {
                     <p className="text-[11px] text-on-surface-variant leading-snug">{alert.description}</p>
                     
                     <div className="mt-1 pt-1.5 border-t border-outline-variant/30 flex justify-between items-center">
-                      <span className="text-[10px] font-bold text-on-surface uppercase">Est. Lead Time: {alert.leadTimeMinutes}m</span>
-                      <button 
-                        onClick={() => acknowledgeAlert(alert.id)}
-                        className="px-2 py-0.5 rounded bg-surface-container-lowest text-code-sm font-semibold hover:bg-surface-container transition-colors border border-outline-variant"
-                      >
-                        Acknowledge
-                      </button>
+                      <span className="text-[10px] font-bold text-on-surface uppercase">Est. Lead: {alert.leadTimeMinutes}m</span>
+                      <div className="flex items-center gap-1.5">
+                        <button 
+                          onClick={() => acknowledgeAlert(alert.id)}
+                          className="px-2 py-0.5 rounded bg-surface-container-lowest text-code-sm font-semibold hover:bg-surface-container transition-colors border border-outline-variant text-primary"
+                        >
+                          Ack
+                        </button>
+                        <button 
+                          onClick={() => resolveAlert(alert.id)}
+                          className="px-2 py-0.5 rounded bg-surface-container-lowest text-code-sm font-semibold hover:bg-surface-container transition-colors border border-outline-variant text-on-surface-variant"
+                        >
+                          Resolve
+                        </button>
+                      </div>
                     </div>
                   </div>
                 ))

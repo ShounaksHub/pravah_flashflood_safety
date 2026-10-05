@@ -31,6 +31,7 @@ interface AppState {
   // Alerts
   alerts: Alert[];
   updateAlerts: (alerts: Alert[]) => void;
+  addAlert: (alert: Alert) => void;
   acknowledgeAlert: (id: string) => void;
   resolveAlert: (id: string) => void;
 
@@ -40,10 +41,12 @@ interface AppState {
   // NDRF
   ndrfTeams: NDRFTeam[];
   deploymentRecommendations: DeploymentRecommendation[];
+  deployNDRFTeam: (teamId: string, targetLocation?: string) => void;
 
   // Citizen reports
   citizenReports: CitizenReport[];
   addCitizenReport: (report: CitizenReport) => void;
+  verifyCitizenReport: (id: string, verifiedBy?: string) => void;
 
   // User & Auth
   isAuthenticated: boolean;
@@ -94,8 +97,16 @@ export const useAppStore = create<AppState>((set, get) => ({
 
   alerts: mockAlerts,
   updateAlerts: (alerts) => set({ alerts }),
+  addAlert: (alert) => set((state) => ({
+    alerts: [alert, ...state.alerts],
+  })),
   acknowledgeAlert: (id) => set((state) => ({
-    alerts: state.alerts.map((a) => a.id === id ? { ...a, status: 'ACKNOWLEDGED' as const, acknowledgedBy: 'Current Officer', acknowledgedAt: new Date().toISOString() } : a),
+    alerts: state.alerts.map((a) => a.id === id ? {
+      ...a,
+      status: 'ACKNOWLEDGED' as const,
+      acknowledgedBy: state.currentUser?.name || 'Current Officer',
+      acknowledgedAt: new Date().toISOString()
+    } : a),
   })),
   resolveAlert: (id) => set((state) => ({
     alerts: state.alerts.map((a) => a.id === id ? { ...a, status: 'RESOLVED' as const } : a),
@@ -105,10 +116,28 @@ export const useAppStore = create<AppState>((set, get) => ({
 
   ndrfTeams: mockNDRFTeams,
   deploymentRecommendations: mockDeploymentRecommendations,
+  deployNDRFTeam: (teamNameOrId, targetLocation) => set((state) => ({
+    ndrfTeams: state.ndrfTeams.map(t => (t.id === teamNameOrId || t.name.toLowerCase().includes(teamNameOrId.toLowerCase())) ? {
+      ...t,
+      status: 'DEPLOYED' as const,
+      currentLocation: targetLocation || 'En Route (SH-11 Detour)',
+    } : t),
+    deploymentRecommendations: state.deploymentRecommendations.map(r => (r.nearestTeam.toLowerCase().includes(teamNameOrId.toLowerCase()) || r.village.toLowerCase().includes(teamNameOrId.toLowerCase())) ? {
+      ...r,
+      recommendedAction: 'Unit deployed and en route to sector',
+    } : r),
+  })),
 
   citizenReports: mockCitizenReports,
   addCitizenReport: (report) => set((state) => ({
     citizenReports: [report, ...state.citizenReports],
+  })),
+  verifyCitizenReport: (id, verifiedBy) => set((state) => ({
+    citizenReports: state.citizenReports.map(r => r.id === id ? {
+      ...r,
+      status: 'VERIFIED' as const,
+      verifiedBy: verifiedBy || state.currentUser?.name || 'Verified by Officer',
+    } : r),
   })),
 
   isAuthenticated: false,

@@ -1,11 +1,45 @@
+import { useState } from 'react';
 import { useAppStore } from '../../hooks/useAppStore';
-import { AlertTriangle, Info, Share2, Megaphone } from 'lucide-react';
+import { AlertTriangle, Info, Share2, Megaphone, CheckCircle2, Volume2 } from 'lucide-react';
+import type { Alert } from '../../types/alerts';
 
 export default function SectorRiskAnalysis() {
-  const { villages } = useAppStore();
+  const { villages, addAlert, currentUser } = useAppStore();
+  const [sirenActive, setSirenActive] = useState(false);
+  const [sdmaRelayed, setSdmaRelayed] = useState(false);
   
   // Use Mawsynram as the critical analysis target
   const target = villages.find(v => v.id === 'V001') || villages[0];
+
+  const handleIssueRedAlert = () => {
+    const newAlert: Alert = {
+      id: `ALT-CRIT-${Date.now().toString().slice(-4)}`,
+      severity: 'CRITICAL',
+      type: 'FLASH_FLOOD',
+      title: `SECTOR RED ALERT: Flash Surge at ${target.name}`,
+      description: `Critical runoff approaching ${target.name} basin. Acoustic sirens triggered. Immediate evacuation required.`,
+      location: `${target.name} Basin / Wahrew Stream`,
+      block: target.block || 'Mawsynram',
+      latitude: target.latitude,
+      longitude: target.longitude,
+      issuedAt: new Date().toISOString(),
+      expiresAt: new Date(Date.now() + 6 * 3600000).toISOString(),
+      leadTimeMinutes: target.leadTimeMinutes,
+      affectedPopulation: target.populationExposure,
+      recommendedAction: 'Immediate low-lying evacuation. Deploy swiftwater rescue teams.',
+      status: 'ACTIVE',
+      source: currentUser ? `${currentUser.name} (${currentUser.role})` : 'Incident Commander',
+    };
+
+    addAlert(newAlert);
+    setSirenActive(true);
+    setTimeout(() => setSirenActive(false), 5000);
+  };
+
+  const handleRelaySDMA = () => {
+    setSdmaRelayed(true);
+    setTimeout(() => setSdmaRelayed(false), 4000);
+  };
 
   return (
     <div className="bg-surface-container-lowest rounded border border-outline-variant shadow-sm overflow-hidden flex flex-col">
@@ -20,6 +54,20 @@ export default function SectorRiskAnalysis() {
       </div>
 
       <div className="p-3 flex flex-col gap-3">
+        {sirenActive && (
+          <div className="p-2.5 bg-[#fee2e2] border border-[#f87171] text-[#991b1b] rounded text-body-sm font-semibold flex items-center gap-2 animate-bounce">
+            <Volume2 size={18} className="animate-spin text-error" />
+            <span>SIREN ACTIVE (120dB) • CAP Evacuation Alert Broadcasted to {target.name} lowlands!</span>
+          </div>
+        )}
+
+        {sdmaRelayed && (
+          <div className="p-2.5 bg-[#dcfce7] border border-[#86efac] text-[#166534] rounded text-body-sm font-semibold flex items-center gap-2">
+            <CheckCircle2 size={16} />
+            <span>Radar Reflectivity & Telemetry Packet Relayed to SEOC & SDMA Shillong!</span>
+          </div>
+        )}
+
         <div>
           <div className="text-headline-sm font-bold text-on-surface">{target.name} Cluster (Ward 2 & 4)</div>
           <div className="font-mono text-code-sm text-on-surface-variant">Administrative Division: {target.district}</div>
@@ -60,10 +108,16 @@ export default function SectorRiskAnalysis() {
         </div>
 
         <div className="flex items-center gap-2 pt-1">
-          <button className="flex-1 h-8 bg-error hover:bg-[#991b1b] text-white rounded text-sm font-semibold transition-colors flex items-center justify-center gap-1 shadow-sm" onClick={() => alert('Evacuation Siren Triggered!')}>
+          <button 
+            className="flex-1 h-8 bg-error hover:bg-[#991b1b] text-white rounded text-sm font-semibold transition-colors flex items-center justify-center gap-1 shadow-sm active:scale-95" 
+            onClick={handleIssueRedAlert}
+          >
             <Megaphone size={16} /> Issue Sector Red Alert
           </button>
-          <button className="h-8 px-3 bg-surface-container-lowest border border-outline-variant hover:bg-surface-container rounded text-sm text-on-surface transition-colors flex items-center gap-1">
+          <button 
+            onClick={handleRelaySDMA}
+            className="h-8 px-3 bg-surface-container-lowest border border-outline-variant hover:bg-surface-container rounded text-sm text-on-surface transition-colors flex items-center gap-1 active:scale-95"
+          >
             <Share2 size={16} /> Relay SDMA
           </button>
         </div>

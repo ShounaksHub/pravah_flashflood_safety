@@ -1,12 +1,22 @@
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '../../hooks/useAppStore';
-import { ShieldCheck, CheckCircle2 } from 'lucide-react';
+import { ShieldCheck, CheckCircle2, Navigation, AlertCircle } from 'lucide-react';
 import SectionHeader from './SectionHeader';
 
 export default function NDRFDecisionEngine() {
-  const { deploymentRecommendations } = useAppStore();
+  const navigate = useNavigate();
+  const { deploymentRecommendations, deployNDRFTeam, currentUser } = useAppStore();
+  const [assignedTeamId, setAssignedTeamId] = useState<string | null>(null);
 
   const priority1 = deploymentRecommendations[0];
   const priority2 = deploymentRecommendations[1];
+
+  const handleAssignTeam = (teamId: string) => {
+    deployNDRFTeam(teamId, 'En Route to Mawsynram Cluster');
+    setAssignedTeamId(teamId);
+    setTimeout(() => setAssignedTeamId(null), 5000);
+  };
 
   return (
     <div className="bg-surface-container-lowest rounded border border-outline-variant shadow-sm flex flex-col">
@@ -22,6 +32,13 @@ export default function NDRFDecisionEngine() {
       </div>
       
       <div className="p-3 flex flex-col gap-3">
+        {assignedTeamId && (
+          <div className="p-2.5 bg-[#dcfce7] border border-[#86efac] text-[#166534] rounded text-body-sm font-semibold flex items-center gap-2">
+            <CheckCircle2 size={16} />
+            <span>Unit Mobilized: Alpha Team dispatched by {currentUser?.name.split(',')[0] || 'DEO'}. Requisition #DDMA-2026-NDRF01 broadcast!</span>
+          </div>
+        )}
+
         {/* Card 1 */}
         {priority1 && (
           <div className="rounded border-2 border-error bg-error-container/10 p-3 flex flex-col gap-2 shadow-sm">
@@ -45,11 +62,17 @@ export default function NDRFDecisionEngine() {
             </div>
             
             <div className="flex items-center gap-2 pt-1">
-              <button className="flex-1 h-7 bg-primary hover:bg-[#1e40af] text-white rounded text-[12px] font-semibold transition-colors flex items-center justify-center gap-1" onClick={() => alert('NDRF Team Dispatched via API')}>
+              <button 
+                className="flex-1 h-7 bg-primary hover:bg-[#1e40af] text-white rounded text-[12px] font-semibold transition-colors flex items-center justify-center gap-1 active:scale-95 shadow-sm" 
+                onClick={() => handleAssignTeam(priority1.nearestTeam)}
+              >
                 <CheckCircle2 size={14} /> Assign Team
               </button>
-              <button className="h-7 px-2 bg-surface-container-lowest border border-outline hover:bg-surface-container rounded text-[11px] text-on-surface">
-                Nav Route
+              <button 
+                onClick={() => navigate('/roads')}
+                className="h-7 px-3 bg-surface-container-lowest border border-outline hover:bg-surface-container rounded text-[11px] text-on-surface font-semibold flex items-center gap-1 active:scale-95"
+              >
+                <Navigation size={12} /> Nav Route
               </button>
             </div>
           </div>
@@ -73,6 +96,15 @@ export default function NDRFDecisionEngine() {
             
             <div className="p-2 bg-surface-container-lowest rounded border border-outline-variant text-[11px] text-on-surface">
               <strong className="text-on-surface">Recommended Action:</strong> {priority2.recommendedAction}
+            </div>
+
+            <div className="flex items-center gap-2 pt-1">
+              <button 
+                className="flex-1 h-7 bg-surface-container-low border border-outline-variant hover:bg-surface-container text-on-surface rounded text-[12px] font-semibold transition-colors flex items-center justify-center gap-1"
+                onClick={() => handleAssignTeam(priority2.nearestTeam)}
+              >
+                <AlertCircle size={13} className="text-[#b45309]" /> Stage Unit on Standby
+              </button>
             </div>
           </div>
         )}

@@ -1,8 +1,10 @@
+import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '../../hooks/useAppStore';
 import { TrafficCone } from 'lucide-react';
 import SectionHeader from './SectionHeader';
 
 export default function RoadAccessibilityTable() {
+  const navigate = useNavigate();
   const { roads } = useAppStore();
 
   return (
@@ -54,6 +56,12 @@ export default function RoadAccessibilityTable() {
       </div>
       <div className="p-2 bg-surface-container-low border-t border-outline-variant flex items-center justify-between text-[11px]">
         <span className="text-on-surface-variant font-mono">Detour: Via Mawphlang Bypass (Open)</span>
+        <button 
+          onClick={() => navigate('/roads')} 
+          className="text-primary hover:underline font-semibold font-mono text-[11px]"
+        >
+          Detour Nav →
+        </button>
       </div>
     </div>
   );
