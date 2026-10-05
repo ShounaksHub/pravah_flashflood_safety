@@ -1,9 +1,11 @@
+import { useState } from 'react';
 import { useAppStore } from '../../hooks/useAppStore';
 import { ShieldCheck, CheckCircle2 } from 'lucide-react';
 import SectionHeader from './SectionHeader';
 
 export default function NDRFDecisionEngine() {
   const { deploymentRecommendations, ndrfTeams, dispatchNDRFTeam } = useAppStore();
+  const [routeNote, setRouteNote] = useState<string | null>(null);
 
   const priority1 = deploymentRecommendations[0];
   const priority2 = deploymentRecommendations[1];
@@ -50,7 +52,7 @@ export default function NDRFDecisionEngine() {
               </button>
               <button
                 className="h-7 px-2 bg-surface-container-lowest border border-outline hover:bg-surface-container rounded text-[11px] text-on-surface"
-                onClick={() => priority1 && alert(`Demo route: ${priority1.nearestTeam} → ${priority1.village}`)}
+                onClick={() => priority1 && setRouteNote(`Demo route selected: ${priority1.nearestTeam} → ${priority1.village}`)}
               >
                 Nav Route
               </button>
@@ -80,6 +82,7 @@ export default function NDRFDecisionEngine() {
           </div>
         )}
       </div>
+      {routeNote && <div className="px-3 pb-3"><div className="p-2 bg-surface-container-low border border-outline-variant rounded text-[10px] font-semibold text-on-surface-variant">{routeNote}</div></div>}
     </div>
   );
 }
