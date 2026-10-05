@@ -1,0 +1,233 @@
+@import "tailwindcss";
+@import "./tokens.css";
+
+@theme {
+  /* ── Colors ── */
+  --color-surface: #f8f9ff;
+  --color-surface-dim: #cbdbf5;
+  --color-surface-bright: #f8f9ff;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #eff4ff;
+  --color-surface-container: #e5eeff;
+  --color-surface-container-high: #dce9ff;
+  --color-surface-container-highest: #d3e4fe;
+  --color-surface-variant: #d3e4fe;
+  --color-surface-tint: #3755c3;
+  --color-on-surface: #0b1c30;
+  --color-on-surface-variant: #444653;
+  --color-background: #f8f9ff;
+  --color-on-background: #0b1c30;
+  --color-outline: #757684;
+  --color-outline-variant: #c4c5d5;
+  --color-primary: #00288e;
+  --color-on-primary: #ffffff;
+  --color-primary-container: #1e40af;
+  --color-on-primary-container: #a8b8ff;
+  --color-primary-accent: #1e40af;
+  --color-primary-hover: #1d4ed8;
+  --color-secondary: #006a63;
+  --color-on-secondary: #ffffff;
+  --color-secondary-container: #99efe5;
+  --color-tertiary: #003757;
+  --color-tertiary-container: #004f7a;
+  --color-on-tertiary-container: #77c2ff;
+  --color-error: #ba1a1a;
+  --color-on-error: #ffffff;
+  --color-error-container: #ffdad6;
+  --color-on-error-container: #93000a;
+  --color-inverse-surface: #283044;
+  --color-inverse-on-surface: #eef0ff;
+  --color-tier4-bg: #fef2f2;
+  --color-tier4-border: #fecaca;
+  --color-tier4-text: #991b1b;
+  --color-tier4-fill: #b91c1c;
+  --color-tier4-dot: #dc2626;
+  --color-tier3-bg: #fff7ed;
+  --color-tier3-border: #fed7aa;
+  --color-tier3-text: #9a3412;
+  --color-tier3-fill: #c2410c;
+  --color-tier3-dot: #ea580c;
+  --color-tier2-bg: #fefce8;
+  --color-tier2-border: #fef08a;
+  --color-tier2-text: #854d0e;
+  --color-tier2-fill: #a16207;
+  --color-tier2-dot: #ca8a04;
+  --color-tier1-bg: #f0fdf4;
+  --color-tier1-border: #bbf7d0;
+  --color-tier1-text: #166534;
+  --color-tier1-fill: #15803d;
+  --color-tier1-dot: #16a34a;
+  --color-tier0-bg: #f1f5f9;
+  --color-tier0-border: #e2e8f0;
+  --color-tier0-text: #475569;
+  --color-tier0-dot: #64748b;
+  --color-slate-50: #f8fafc;
+  --color-slate-100: #f1f5f9;
+  --color-slate-200: #e2e8f0;
+  --color-slate-300: #cbd5e1;
+  --color-slate-400: #94a3b8;
+  --color-slate-500: #64748b;
+  --color-slate-600: #475569;
+  --color-slate-800: #1e293b;
+  --color-slate-900: #0f172a;
+
+  /* ── Spacing ── */
+  --spacing-space-2xs: 0.125rem;
+  --spacing-space-xs: 0.25rem;
+  --spacing-space-sm: 0.5rem;
+  --spacing-space-md: 0.75rem;
+  --spacing-space-lg: 1rem;
+  --spacing-space-xl: 1.5rem;
+  --spacing-gutter: 0.75rem;
+  --spacing-gutter-desktop: 1rem;
+
+  /* ── Radius ── */
+  --radius-sm: 0.125rem;
+  --radius-default: 0.25rem;
+  --radius-md: 0.375rem;
+  --radius-lg: 0.5rem;
+
+  /* ── Font families ── */
+  --font-sans: 'Public Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+}
+
+/* ── Base styles ── */
+html, body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--color-surface);
+  color: var(--color-on-surface);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  line-height: 18px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overscroll-behavior: none;
+}
+
+/* ── Hide scrollbars (operational density) ── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-outline-variant);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-outline);
+}
+
+/* ── Typography Utilities ── */
+.text-display {
+  font-family: var(--font-sans);
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 36px;
+  letter-spacing: -0.02em;
+}
+.text-headline-lg {
+  font-family: var(--font-sans);
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 30px;
+  letter-spacing: -0.015em;
+}
+.text-headline-md {
+  font-family: var(--font-sans);
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 26px;
+  letter-spacing: -0.01em;
+}
+.text-headline-sm {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 22px;
+}
+.text-body-lg {
+  font-family: var(--font-sans);
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 22px;
+}
+.text-body-md {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 18px;
+}
+.text-body-sm {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+}
+.text-label-caps {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 14px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.text-label-metric {
+  font-family: var(--font-mono);
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 24px;
+  letter-spacing: -0.02em;
+}
+.text-code-data {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 18px;
+  letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
+}
+.text-code-sm {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 14px;
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Leaflet overrides for operational style ── */
+.leaflet-container {
+  font-family: var(--font-sans) !important;
+  background: #dbe7ea !important;
+}
+.leaflet-control-zoom a {
+  background: var(--color-surface-container-lowest) !important;
+  color: var(--color-on-surface) !important;
+  border-color: var(--color-outline-variant) !important;
+}
+.leaflet-popup-content-wrapper {
+  border-radius: var(--radius-default) !important;
+  border: 1px solid var(--color-outline-variant) !important;
+  box-shadow: var(--elevation-2) !important;
+}
+
+/* ── Severity chip animation ── */
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+.pulse-dot {
+  animation: pulse-dot 1.5s ease-in-out infinite;
+}
+
+/* ── Recharts overrides ── */
+.recharts-cartesian-axis-tick-value {
+  font-family: var(--font-mono) !important;
+  font-size: 10px !important;
+  fill: var(--color-on-surface-variant) !important;
+}

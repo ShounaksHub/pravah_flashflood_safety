@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&amp;family=Public+Sans:wght@400;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "surface-bright": "#faf8ff", "on-secondary": "#ffffff", "on-primary-fixed": "#001453", "primary-container": "#1e40af", "inverse-surface": "#283044", "secondary": "#006a63", "secondary-container": "#99efe5", "background": "#faf8ff", "surface-container-low": "#f2f3ff", "surface": "#faf8ff", "surface-variant": "#dae2fd", "error-container": "#ffdad6", "on-secondary-fixed-variant": "#00504a", "on-secondary-container": "#006f67", "surface-dim": "#d2d9f4", "surface-container": "#eaedff", "secondary-fixed-dim": "#80d5cb", "primary": "#00288e", "on-surface": "#131b2e", "inverse-primary": "#b8c4ff", "surface-container-highest": "#dae2fd", "surface-container-lowest": "#ffffff", "tertiary-container": "#004f7a", "on-tertiary": "#ffffff", "on-error-container": "#93000a", "on-primary-container": "#a8b8ff", "on-error": "#ffffff", "error": "#ba1a1a", "outline": "#757684", "surface-tint": "#3755c3", "on-secondary-fixed": "#00201d", "on-primary": "#ffffff", "tertiary": "#003757", "inverse-on-surface": "#eef0ff", "on-background": "#131b2e", "tertiary-fixed-dim": "#93ccff", "primary-fixed": "#dde1ff", "on-surface-variant": "#444653", "on-primary-fixed-variant": "#173bab", "on-tertiary-fixed-variant": "#004b73", "on-tertiary-fixed": "#001d31", "tertiary-fixed": "#cce5ff", "surface-container-high": "#e2e7ff", "secondary-fixed": "#9cf2e8", "primary-fixed-dim": "#b8c4ff", "on-tertiary-container": "#77c2ff", "outline-variant": "#c4c5d5" }, "borderRadius": { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" }, "spacing": { "space-xs": "0.25rem", "gutter": "0.75rem", "gutter-desktop": "1rem", "space-lg": "1rem", "margin-desktop": "1.25rem", "space-xl": "1.5rem", "space-sm": "0.5rem", "space-2xs": "0.125rem", "space-md": "0.75rem", "margin": "0.75rem" }, "fontFamily": { "label-caps": [ "Public Sans" ], "headline-lg": [ "Public Sans" ], "body-md": [ "Public Sans" ], "body-lg": [ "Public Sans" ], "headline-md": [ "Public Sans" ], "body-sm": [ "Public Sans" ], "label-metric": [ "JetBrains Mono" ], "display": [ "Public Sans" ], "code-data": [ "JetBrains Mono" ], "code-sm": [ "JetBrains Mono" ], "headline-sm": [ "Public Sans" ] }, "fontSize": { "label-caps": [ "11px", { "lineHeight": "14px", "letterSpacing": "0.06em", "fontWeight": "700" } ], "headline-lg": [ "24px", { "lineHeight": "30px", "letterSpacing": "-0.015em", "fontWeight": "700" } ], "body-md": [ "13px", { "lineHeight": "18px", "fontWeight": "400" } ], "body-lg": [ "15px", { "lineHeight": "22px", "fontWeight": "400" } ], "headline-md": [ "20px", { "lineHeight": "26px", "letterSpacing": "-0.01em", "fontWeight": "600" } ], "body-sm": [ "12px", { "lineHeight": "16px", "fontWeight": "400" } ], "label-metric": [ "20px", { "lineHeight": "24px", "letterSpacing": "-0.02em", "fontWeight": "700" } ], "display": [ "30px", { "lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "700" } ], "code-data": [ "13px", { "lineHeight": "18px", "letterSpacing": "-0.01em", "fontWeight": "500" } ], "code-sm": [ "11px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "500" } ], "headline-sm": [ "16px", { "lineHeight": "22px", "letterSpacing": "0em", "fontWeight": "600" } ] } } } };</script></head><body class="bg-surface text-on-surface font-body-md text-body-md antialiased"><header class="fixed top-0 left-0 right-0 h-16 bg-surface-container-lowest border-b border-outline-variant z-50 px-gutter-desktop"><div class="h-16 flex items-center justify-between gap-space-md"><div class="flex items-center gap-space-md min-w-max"><div class="w-9 h-9 rounded bg-primary flex items-center justify-center text-on-primary font-bold shadow-sm"><span class="material-symbols-outlined text-[22px]">shield</span></div><div class="flex flex-col"><div class="flex items-center gap-space-xs"><span class="font-headline-sm text-headline-sm uppercase tracking-tight text-primary">FlashSafe Command</span><span class="px-1.5 py-0.5 rounded bg-surface-container text-on-surface-variant font-code-sm text-code-sm border border-outline-variant font-semibold">SIH26192</span></div><span class="font-code-sm text-code-sm text-on-surface-variant">Early Warning &amp; Decision Support System | District Emergency Operations Centre</span></div></div><div class="hidden xl:flex items-center gap-space-sm"><div class="flex items-center gap-space-xs px-2.5 py-1 rounded bg-surface-container-low border border-outline-variant font-code-sm text-code-sm text-on-surface"><span class="text-on-surface-variant font-label-caps text-label-caps uppercase">Jurisdiction:</span><span class="font-semibold">Meghalaya</span><span class="text-outline-variant">/</span><span>East Khasi Hills</span></div><div class="flex items-center gap-1.5 px-2.5 py-1 rounded bg-error-container text-on-error-container border border-error font-code-sm text-code-sm font-semibold"><span class="w-2 h-2 rounded-full bg-error animate-ping"></span><span>MONSOON MODE ACTIVE</span></div><div class="flex items-center gap-1.5 px-2.5 py-1 rounded bg-surface-container-low border border-outline-variant font-code-sm text-code-sm"><span class="w-2 h-2 rounded-full bg-secondary"></span><span class="font-semibold text-secondary">7/8 ONLINE</span></div><div class="px-2.5 py-1 rounded bg-surface-container-low border border-outline-variant font-code-sm text-code-sm text-on-surface-variant"><span>SYNC:</span><span class="font-semibold text-on-surface ml-1">11:42 AM IST</span></div><div class="px-2 py-0.5 rounded bg-surface-container-high text-on-surface-variant font-label-caps text-label-caps border border-outline uppercase">Demo Data</div></div><div class="flex items-center gap-space-md"><div class="flex items-center gap-space-xs"><label class="sr-only" for="role-switcher">Command Role</label><select class="h-8 px-2 bg-surface-container-low border border-outline-variant rounded font-body-sm text-body-sm text-on-surface focus:outline-none focus:border-primary" id="role-switcher"><option selected="">District Emergency Officer</option><option>NDRF Officer</option><option>Field Officer</option><option>Admin</option></select><button class="relative h-8 w-8 rounded border border-outline-variant bg-surface-container-low flex items-center justify-center text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors"><span class="material-symbols-outlined text-[18px]">notifications</span><span class="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-error text-on-error font-code-sm text-[10px] leading-none flex items-center justify-center font-bold">3</span></button></div><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><aside class="fixed left-0 top-16 bottom-0 w-72 bg-surface-container-lowest border-r border-outline-variant z-40 flex flex-col justify-between overflow-hidden"><div class="flex-1 flex flex-col min-h-0"><div class="p-space-sm border-b border-outline-variant bg-surface-container-low flex items-center justify-between"><span class="font-label-caps text-label-caps uppercase text-on-surface-variant tracking-wider">Tactical Consoles</span><span class="font-code-sm text-code-sm text-on-surface-variant">v4.2-EOC</span></div><nav class="flex-1 overflow-y-auto p-space-xs flex flex-col gap-0.5" data-active-classes="bg-primary-container text-on-primary font-semibold border-l-4 border-primary shadow-sm"><a aria-current="page" class="flex items-center px-2.5 py-2 rounded transition-colors bg-primary-container text-on-primary font-semibold border-l-4 border-primary shadow-sm" data-path="command-overview" href="#"><span class="material-symbols-outlined text-[18px] mr-2.5">dashboard</span>Command Overview</a><a class="flex items-center px-2.5 py-2 rounded text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors font-body-sm text-body-sm" data-path="live-risk-map-gis" href="#"><span class="material-symbols-outlined text-[18px] mr-2.5">map</span>Live Risk Map &amp; GIS</a><a class="flex items-center px-2.5 py-2 rounded text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors font-body-sm text-body-sm" data-path="flood-slope-forecast" href="#"><span class="material-symbols-outlined text-[18px] mr-2.5">rainy</span>Flood &amp; Slope Forecast</a><a class="flex items-center px-2.5 py-2 rounded text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors font-body-sm text-body-sm" data-path="risk-assessment" href="#"><span class="material-symbols-outlined text-[18px] mr-2.5">monitoring</span>Risk Assessment</a><a class="flex items-center px-2.5 py-2 rounded text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors font-body-sm text-body-sm" data-path="ndrf-deployment-priority" href="#"><span class="material-symbols-outlined text-[18px] mr-2.5">military_tech</span>NDRF Deployment Priority</a><a class="flex items-center px-2.5 py-2 rounded text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors font-body-sm text-body-sm" data-path="resource-allocation" href="#"><span class="material-symbols-outlined text-[18px] mr-2.5">inventory</span>Resource Allocation</a><a class="flex items-center px-2.5 py-2 rounded text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors font-body-sm text-body-sm" data-path="road-accessibility" href="#"><span class="material-symbols-outlined text-[18px] mr-2.5">traffic</span>Road Accessibility</a><a class="flex items-center px-2.5 py-2 rounded text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors font-body-sm text-body-sm" data-path="catchment-downstream-propagation" href="#"><span class="material-symbols-outlined text-[18px] mr-2.5">water</span>Catchment Propagation</a><a class="flex items-center px-2.5 py-2 rounded text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors font-body-sm text-body-sm" data-path="alert-center" href="#"><span class="material-symbols-outlined text-[18px] mr-2.5">campaign</span>Alert Center</a><a class="flex items-center px-2.5 py-2 rounded text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors font-body-sm text-body-sm" data-path="sitrep-generator" href="#"><span class="material-symbols-outlined text-[18px] mr-2.5">description</span>SitRep Generator</a><a class="flex items-center px-2.5 py-2 rounded text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors font-body-sm text-body-sm" data-path="citizen-ground-reports" href="#"><span class="material-symbols-outlined text-[18px] mr-2.5">report</span>Citizen Ground Reports</a><a class="flex items-center px-2.5 py-2 rounded text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors font-body-sm text-body-sm" data-path="system-feeds-health" href="#"><span class="material-symbols-outlined text-[18px] mr-2.5">sensors</span>System Feeds &amp; Health</a></nav></div><div class="border-t border-outline-variant p-space-sm bg-surface-container-low flex flex-col gap-1.5"><div class="flex flex-col"><span class="font-label-caps text-label-caps uppercase text-on-surface-variant">Logged Operator</span><span class="font-body-sm text-body-sm font-semibold text-on-surface truncate">Shri R. Lyngdoh, IAS</span><span class="font-code-sm text-code-sm text-on-surface-variant truncate">District Emergency Officer</span><span class="font-code-sm text-code-sm text-primary font-medium truncate">DDMA East Khasi Hills</span></div><div class="pt-1 border-t border-outline-variant flex items-center justify-between font-code-sm text-code-sm"><span class="text-on-surface-variant">HELPLINE:</span><span class="font-bold text-error">1077 / 112</span></div></div></aside><div class="pl-72"><main class="w-full min-h-screen pt-16 bg-surface px-gutter-desktop py-space-md"><div class="max-w-[1440px] mx-auto"><div class="flex flex-col w-full gap-space-md">
+<!-- TOP CONSOLE SUB-HEADER / SIMULATION BANNER -->
+<div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-space-sm bg-surface-container-low p-space-sm rounded border border-outline-variant shadow-sm">
+<div class="flex items-center gap-space-md flex-wrap">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[20px]">crisis_alert</span>
+<span class="font-headline-sm text-headline-sm uppercase tracking-tight text-primary">Tactical Command &amp; Hydrological Operations Center</span>
+</div>
+<div class="h-4 w-px bg-outline-variant hidden md:block"></div>
+<span class="font-code-sm text-code-sm text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[15px] text-secondary">update</span>
+        SYNCHRONIZED WITH CWC TELEMETRY &amp; IMD AWS NETWORK (CYCLE: +5M)
+      </span>
+</div>
+<div class="flex items-center gap-space-xs font-code-sm text-code-sm">
+<span class="px-2 py-0.5 rounded bg-surface-container-highest text-on-surface-variant border border-outline font-semibold">
+        [DEMO DATA: For Operational Simulation &amp; Validation]
+      </span>
+<span class="text-on-surface-variant text-[11px]">SIT-ID: EK-MON-26192</span>
+</div>
+</div>
+<!-- 1. TOP KPI STATUS BAR -->
+<div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-space-sm">
+<!-- Active Warnings -->
+<div class="bg-surface-container-lowest p-space-sm rounded border border-outline-variant flex flex-col justify-between shadow-sm relative overflow-hidden">
+<div class="absolute top-0 left-0 w-1 h-full bg-error"></div>
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps uppercase text-on-surface-variant">Active Warnings</span>
+<span class="w-2 h-2 rounded-full bg-error animate-ping"></span>
+</div>
+<div class="flex items-baseline gap-space-xs my-1">
+<span class="font-label-metric text-[26px] text-error">03</span>
+<span class="font-code-sm text-code-sm text-error font-semibold">FLASH FLOOD</span>
+</div>
+<div class="flex items-center justify-between font-code-sm text-[10px] text-on-surface-variant pt-1 border-t border-surface-container">
+<span>RED: Mawsynram</span>
+<a class="text-primary hover:underline font-semibold" href="#">Review →</a>
+</div>
+</div>
+<!-- Very High Risk Villages -->
+<div class="bg-surface-container-lowest p-space-sm rounded border border-outline-variant flex flex-col justify-between shadow-sm relative overflow-hidden">
+<div class="absolute top-0 left-0 w-1 h-full bg-error"></div>
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps uppercase text-on-surface-variant">Very High Risk</span>
+<span class="px-1.5 py-0.2 rounded bg-error-container text-on-error-container font-code-sm text-[10px] font-bold">CRITICAL</span>
+</div>
+<div class="flex items-baseline gap-space-xs my-1">
+<span class="font-label-metric text-[26px] text-error">04</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Villages</span>
+</div>
+<div class="flex items-center justify-between font-code-sm text-[10px] text-on-surface-variant pt-1 border-t border-surface-container">
+<span class="truncate" title="Mawsynram, Tyrsad, Laitkynsew, Mawlyndiar">Mawsynram +3</span>
+<a class="text-primary hover:underline font-semibold" href="#">Triage →</a>
+</div>
+</div>
+<!-- High Risk Villages -->
+<div class="bg-surface-container-lowest p-space-sm rounded border border-outline-variant flex flex-col justify-between shadow-sm relative overflow-hidden">
+<div class="absolute top-0 left-0 w-1 h-full bg-secondary"></div>
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps uppercase text-on-surface-variant">High Risk Villages</span>
+<span class="px-1.5 py-0.2 rounded bg-surface-container text-on-surface-variant font-code-sm text-[10px] font-semibold">MONITORED</span>
+</div>
+<div class="flex items-baseline gap-space-xs my-1">
+<span class="font-label-metric text-[26px] text-secondary">11</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Sectors</span>
+</div>
+<div class="flex items-center justify-between font-code-sm text-[10px] text-on-surface-variant pt-1 border-t border-surface-container">
+<span class="truncate">Sohra, Pynursla</span>
+<a class="text-primary hover:underline font-semibold" href="#">List (11) →</a>
+</div>
+</div>
+<!-- Critical Roads -->
+<div class="bg-surface-container-lowest p-space-sm rounded border border-outline-variant flex flex-col justify-between shadow-sm relative overflow-hidden">
+<div class="absolute top-0 left-0 w-1 h-full bg-error"></div>
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps uppercase text-on-surface-variant">Critical Roads</span>
+<span class="px-1.5 py-0.2 rounded bg-error-container text-on-error-container font-code-sm text-[10px] font-bold">1 BLOCKED</span>
+</div>
+<div class="flex items-baseline gap-space-xs my-1">
+<span class="font-label-metric text-[26px] text-on-surface">06</span>
+<span class="font-body-sm text-body-sm text-error font-medium">At Risk / Cut</span>
+</div>
+<div class="flex items-center justify-between font-code-sm text-[10px] text-on-surface-variant pt-1 border-t border-surface-container">
+<span class="truncate">SH-11 (Km 18 cut)</span>
+<a class="text-primary hover:underline font-semibold" href="#">Detour →</a>
+</div>
+</div>
+<!-- Active Sensor Alerts -->
+<div class="bg-surface-container-lowest p-space-sm rounded border border-outline-variant flex flex-col justify-between shadow-sm relative overflow-hidden">
+<div class="absolute top-0 left-0 w-1 h-full bg-tertiary"></div>
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps uppercase text-on-surface-variant">Sensor Triggers</span>
+<span class="material-symbols-outlined text-secondary text-[16px]">sensors</span>
+</div>
+<div class="flex items-baseline gap-space-xs my-1">
+<span class="font-label-metric text-[26px] text-primary">03</span>
+<span class="font-code-sm text-code-sm text-on-surface-variant">/ 24 Gauges</span>
+</div>
+<div class="flex items-center justify-between font-code-sm text-[10px] text-on-surface-variant pt-1 border-t border-surface-container">
+<span class="truncate">Wahrew + Cherra</span>
+<a class="text-primary hover:underline font-semibold" href="#">Telemetry →</a>
+</div>
+</div>
+<!-- NDRF Teams Available -->
+<div class="bg-surface-container-lowest p-space-sm rounded border border-outline-variant flex flex-col justify-between shadow-sm relative overflow-hidden">
+<div class="absolute top-0 left-0 w-1 h-full bg-primary"></div>
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps uppercase text-on-surface-variant">NDRF Dispatched / Ready</span>
+<span class="px-1.5 py-0.2 rounded bg-primary-container text-on-primary font-code-sm text-[10px] font-semibold">1st BN</span>
+</div>
+<div class="flex items-baseline gap-space-xs my-1">
+<span class="font-label-metric text-[26px] text-primary">05</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Units Staged</span>
+</div>
+<div class="flex items-center justify-between font-code-sm text-[10px] text-on-surface-variant pt-1 border-t border-surface-container">
+<span class="truncate">Shillong &amp; Nongstoin</span>
+<a class="text-primary hover:underline font-semibold" href="#">Deploy →</a>
+</div>
+</div>
+</div>
+<!-- 2. MAIN WORKSPACE - SPLIT VIEW (2:1 Desktop Ratio) -->
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-space-md items-start">
+<!-- LEFT/CENTER MAIN COLUMN (8 cols): GIS COMMAND MAP & DOWNSTREAM PROPAGATION -->
+<div class="xl:col-span-8 flex flex-col gap-space-md">
+<!-- GIS MAP CONTAINER CARD -->
+<div class="bg-surface-container-lowest rounded border border-outline-variant shadow-sm overflow-hidden flex flex-col">
+<!-- Map Control Header -->
+<div class="p-space-sm bg-surface-container-low border-b border-outline-variant flex flex-wrap items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[20px]">layers</span>
+<span class="font-headline-sm text-headline-sm uppercase text-on-surface tracking-tight">Geographical Information System | EOC East Khasi Hills</span>
+</div>
+<div class="flex items-center gap-space-xs flex-wrap">
+<label class="font-label-caps text-label-caps uppercase text-on-surface-variant" for="block-filter">Scope:</label>
+<select class="h-7 px-2 bg-surface-container-lowest border border-outline-variant rounded font-body-sm text-body-sm text-on-surface focus:outline-none focus:border-primary" id="block-filter">
+<option selected="">All Blocks (Priority Focus: Mawsynram &amp; Shella)</option>
+<option>Mawsynram C&amp;RD Block</option>
+<option>Shella Bholaganj C&amp;RD Block</option>
+<option>Sohra (Cherrapunji) Block</option>
+<option>Pynursla Block</option>
+<option>Mylliem (Shillong Urban)</option>
+</select>
+<button class="h-7 px-2.5 rounded bg-surface-container border border-outline-variant font-code-sm text-code-sm text-on-surface hover:bg-surface-container-high transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-[15px]">refresh</span>
+              Sync Radar
+            </button>
+</div>
+</div>
+<!-- Layer Toggles Strip -->
+<div class="px-space-sm py-1.5 bg-surface-container border-b border-outline-variant flex items-center gap-space-md overflow-x-auto text-[11px] font-body-sm">
+<span class="font-label-caps uppercase text-on-surface-variant font-bold whitespace-nowrap">Active GIS Layers:</span>
+<label class="flex items-center gap-1 cursor-pointer whitespace-nowrap">
+<input checked="" class="rounded border-outline text-primary focus:ring-0 w-3.5 h-3.5" type="checkbox"/>
+<span class="font-semibold text-primary">Flood Inundation (2D)</span>
+</label>
+<label class="flex items-center gap-1 cursor-pointer whitespace-nowrap">
+<input checked="" class="rounded border-outline text-primary focus:ring-0 w-3.5 h-3.5" type="checkbox"/>
+<span class="text-on-surface">Slope Instability / Landslide</span>
+</label>
+<label class="flex items-center gap-1 cursor-pointer whitespace-nowrap">
+<input checked="" class="rounded border-outline text-primary focus:ring-0 w-3.5 h-3.5" type="checkbox"/>
+<span class="text-on-surface">IMD Doppler Radar Rain</span>
+</label>
+<label class="flex items-center gap-1 cursor-pointer whitespace-nowrap">
+<input checked="" class="rounded border-outline text-primary focus:ring-0 w-3.5 h-3.5" type="checkbox"/>
+<span class="text-on-surface">CWC Hydro Gauges</span>
+</label>
+<label class="flex items-center gap-1 cursor-pointer whitespace-nowrap">
+<input checked="" class="rounded border-outline text-primary focus:ring-0 w-3.5 h-3.5" type="checkbox"/>
+<span class="text-on-surface">Road Transit Arteries</span>
+</label>
+<label class="flex items-center gap-1 cursor-pointer whitespace-nowrap">
+<input class="rounded border-outline text-primary focus:ring-0 w-3.5 h-3.5" type="checkbox"/>
+<span class="text-on-surface-variant">Evacuation Shelters</span>
+</label>
+</div>
+<!-- Interactive GIS Map Simulated Vector Canvas -->
+<div class="relative w-full h-[480px] bg-[#dbe7ea] overflow-hidden select-none" id="gis-viewport">
+<!-- Topographical Relief Background Pattern (SVG Vector Contours) -->
+<svg class="absolute inset-0 w-full h-full pointer-events-none opacity-45" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<pattern height="220" id="contour-pattern" patternunits="userSpaceOnUse" width="220">
+<path d="M 0,40 Q 60,10 110,50 T 220,30" fill="none" stroke="#688b94" stroke-dasharray="3,3" stroke-width="0.8"></path>
+<path d="M 0,80 Q 50,60 120,95 T 220,70" fill="none" stroke="#50737c" stroke-width="0.9"></path>
+<path d="M 0,130 Q 70,110 130,140 T 220,120" fill="none" stroke="#688b94" stroke-width="0.8"></path>
+<path d="M 0,180 Q 40,160 110,195 T 220,170" fill="none" stroke="#50737c" stroke-width="1.1"></path>
+</pattern>
+</defs>
+<rect fill="url(#contour-pattern)" height="100%" width="100%"></rect>
+<!-- Plateau Ridge Shading -->
+<path d="M -20,120 C 180,80 340,180 520,140 C 700,100 860,220 1100,180 L 1100,600 L -20,600 Z" fill="#9dbdc2" opacity="0.25"></path>
+<!-- Southern Escarpment Drop -->
+<path d="M 60,260 C 240,220 420,320 640,290 C 820,260 980,380 1200,340" fill="none" stroke="#486972" stroke-dasharray="6,4" stroke-width="2"></path>
+</svg>
+<!-- River Paths (Wahrew, Umiew, Umngot systems) -->
+<svg class="absolute inset-0 w-full h-full pointer-events-none" xmlns="http://www.w3.org/2000/svg">
+<!-- Umiew Main Gorge -->
+<path d="M 580,-10 C 560,90 510,170 480,240 C 450,310 410,380 390,520" fill="none" opacity="0.9" stroke="#0284c7" stroke-linecap="round" stroke-width="4.5"></path>
+<!-- Wahrew River System (Focus of Alert) -->
+<path d="M 260,80 C 275,150 250,220 285,290 C 315,350 340,420 365,510" fill="none" stroke="#004f7a" stroke-linecap="round" stroke-width="5"></path>
+<!-- Tributary runoff vectors -->
+<path d="M 170,110 Q 230,140 265,170" fill="none" stroke="#38bdf8" stroke-dasharray="4,2" stroke-width="2.5"></path>
+<path d="M 370,140 Q 320,190 280,230" fill="none" stroke="#38bdf8" stroke-dasharray="4,2" stroke-width="2.5"></path>
+</svg>
+<!-- Flood Risk Polygons (Geo-spatial Boundaries) -->
+<!-- 1. Mawsynram Very High Risk Basin (Red) -->
+<div class="absolute top-[130px] left-[150px] w-64 h-52 bg-error/25 border-2 border-dashed border-error rounded-xl pointer-events-none flex items-start justify-end p-2">
+<span class="px-2 py-0.5 bg-error text-on-error font-code-sm text-[10px] font-bold rounded shadow-sm">
+              ZONE A-1: SECTOR MAWSYNRAM [CRITICAL RUNOFF]
+            </span>
+</div>
+<!-- 2. Sohra / Cherrapunji Basin (Orange) -->
+<div class="absolute top-[80px] left-[420px] w-56 h-48 bg-amber-500/20 border-2 border-amber-600 rounded-xl pointer-events-none flex items-start justify-start p-2">
+<span class="px-2 py-0.5 bg-amber-700 text-white font-code-sm text-[10px] font-bold rounded shadow-sm">
+              ZONE B-3: SOHRA VALLEY [HIGH ALERT]
+            </span>
+</div>
+<!-- 3. Pynursla Sector (Yellow/Moderate) -->
+<div class="absolute top-[220px] left-[520px] w-48 h-40 bg-yellow-500/15 border border-yellow-600 rounded pointer-events-none">
+<span class="px-1.5 py-0.5 bg-yellow-600 text-white font-code-sm text-[9px] font-semibold m-1 inline-block">
+              ZONE C-2: PYNURSLA [MODERATE]
+            </span>
+</div>
+<!-- 4. Shillong Central Ridge (Low Risk Green) -->
+<div class="absolute top-[15px] left-[320px] w-72 h-24 bg-secondary/10 border border-secondary/40 rounded pointer-events-none">
+<span class="px-1.5 py-0.5 bg-secondary text-white font-code-sm text-[9px] font-medium m-1 inline-block">
+              SHILLONG HQ HUB [STABLE 1,520m AMSL]
+            </span>
+</div>
+<!-- GIS MARKER PINS (Tactical Positions) -->
+<!-- Pin 1: Wahrew Bridge Gauge (Flashing Critical Red) -->
+<div class="absolute top-[260px] left-[270px] -translate-x-1/2 -translate-y-1/2 z-20 group cursor-pointer">
+<div class="relative flex items-center justify-center">
+<span class="absolute w-8 h-8 rounded-full bg-error/40 animate-ping"></span>
+<div class="w-7 h-7 rounded-full bg-error text-on-error flex items-center justify-center shadow-md border-2 border-white">
+<span class="material-symbols-outlined text-[16px]">waves</span>
+</div>
+</div>
+<!-- Tooltip Info on Map -->
+<div class="absolute left-8 -top-3 bg-surface-container-lowest border border-outline px-2 py-1.5 rounded shadow-lg whitespace-nowrap z-30 pointer-events-auto">
+<div class="flex items-center gap-1 font-label-caps text-[10px] text-error font-bold">
+<span class="w-2 h-2 rounded-full bg-error animate-pulse"></span>
+                CWC SENSOR #A: WAHREW BRIDGE
+              </div>
+<div class="font-code-sm text-code-sm font-bold text-on-surface">Level: 2.80 m <span class="text-error font-normal">(+0.4m/hr)</span></div>
+<div class="font-body-sm text-[10px] text-on-surface-variant">Danger Level: 2.20 m | EXCEEDED +0.60m</div>
+</div>
+</div>
+<!-- Pin 2: Cherra Gorge Hydro Sensor (Amber) -->
+<div class="absolute top-[180px] left-[450px] -translate-x-1/2 -translate-y-1/2 z-20 group cursor-pointer">
+<div class="w-6 h-6 rounded-full bg-amber-600 text-white flex items-center justify-center shadow border-2 border-white">
+<span class="material-symbols-outlined text-[14px]">sensors</span>
+</div>
+<div class="absolute left-7 -top-2 bg-surface-container-lowest border border-outline px-2 py-1 rounded shadow-md whitespace-nowrap">
+<div class="font-label-caps text-[9px] text-amber-700 font-bold">SENSOR #B: CHERRA GORGE</div>
+<div class="font-code-sm text-[11px] font-semibold text-on-surface">1.90 m (Warning Threshold: 2.0 m)</div>
+</div>
+</div>
+<!-- Pin 3: Blocked Road Marker on SH-11 (Landslide Km 18) -->
+<div class="absolute top-[210px] left-[200px] -translate-x-1/2 -translate-y-1/2 z-20 cursor-pointer">
+<div class="w-7 h-7 rounded bg-error text-on-error flex items-center justify-center shadow-lg border border-white">
+<span class="material-symbols-outlined text-[18px]">block</span>
+</div>
+<div class="absolute left-8 -top-3 bg-surface-container-lowest border border-outline px-2 py-1.5 rounded shadow-lg whitespace-nowrap">
+<div class="font-label-caps text-[10px] text-error font-bold uppercase">SH-11 BLOCKED | KM 18</div>
+<div class="font-body-sm text-[11px] text-on-surface">Landslide Debris (DoR clearing team en route)</div>
+</div>
+</div>
+<!-- Pin 4: Evacuation Shelter (Govt HSS Mawsynram) -->
+<div class="absolute top-[150px] left-[240px] -translate-x-1/2 -translate-y-1/2 z-20 cursor-pointer">
+<div class="w-6 h-6 rounded bg-secondary text-on-secondary flex items-center justify-center shadow border-2 border-white">
+<span class="material-symbols-outlined text-[14px]">night_shelter</span>
+</div>
+<div class="absolute -top-9 left-1/2 -translate-x-1/2 bg-surface-container-lowest border border-outline px-2 py-0.5 rounded shadow whitespace-nowrap">
+<span class="font-code-sm text-[10px] font-bold text-secondary">Govt HSS Shelter (Cap: 850 / Occ: 310)</span>
+</div>
+</div>
+<!-- Pin 5: NDRF 1st Bn Staging Base Shillong -->
+<div class="absolute top-[40px] left-[350px] -translate-x-1/2 -translate-y-1/2 z-20 cursor-pointer">
+<div class="w-7 h-7 rounded-full bg-primary text-on-primary flex items-center justify-center shadow border-2 border-white">
+<span class="material-symbols-outlined text-[16px]">military_tech</span>
+</div>
+<div class="absolute left-8 -top-2 bg-surface-container-lowest border border-outline px-2 py-1 rounded shadow whitespace-nowrap">
+<div class="font-label-caps text-[9px] text-primary font-bold">NDRF STAGING POST ALPHA</div>
+<div class="font-code-sm text-[11px]">Shillong Reserve | ETA Mawsynram: 42 min</div>
+</div>
+</div>
+<!-- Floating Map Compass & GIS Scale Tools -->
+<div class="absolute top-3 right-3 flex flex-col gap-1 bg-surface-container-lowest/95 border border-outline rounded p-1.5 shadow-md">
+<button class="w-7 h-7 flex items-center justify-center hover:bg-surface-container rounded text-on-surface font-bold text-sm">+</button>
+<div class="h-px bg-outline-variant"></div>
+<button class="w-7 h-7 flex items-center justify-center hover:bg-surface-container rounded text-on-surface font-bold text-sm">-</button>
+<div class="h-px bg-outline-variant"></div>
+<button class="w-7 h-7 flex items-center justify-center hover:bg-surface-container rounded text-on-surface" title="Recenter View">
+<span class="material-symbols-outlined text-[16px]">my_location</span>
+</button>
+</div>
+<!-- Floating Interactive GIS Legend -->
+<div class="absolute bottom-3 left-3 bg-surface-container-lowest/95 border border-outline rounded p-2 shadow-lg max-w-[240px] font-body-sm text-[11px]">
+<div class="font-label-caps text-[10px] uppercase text-on-surface-variant font-bold pb-1 border-b border-outline-variant mb-1.5 flex justify-between items-center">
+<span>Risk Severity Index</span>
+<span class="text-[9px] font-normal text-on-surface-variant">IS:1893</span>
+</div>
+<div class="grid grid-cols-2 gap-x-2 gap-y-1">
+<div class="flex items-center gap-1.5">
+<span class="w-2.5 h-2.5 rounded-sm bg-error inline-block"></span>
+<span>Very High (Flash)</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-2.5 h-2.5 rounded-sm bg-amber-500 inline-block"></span>
+<span>High Watch</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-2.5 h-2.5 rounded-sm bg-yellow-400 inline-block"></span>
+<span>Moderate Risk</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-2.5 h-2.5 rounded-sm bg-secondary inline-block"></span>
+<span>Low / Stable</span>
+</div>
+</div>
+<div class="pt-1.5 mt-1.5 border-t border-outline-variant flex items-center justify-between text-[10px] text-on-surface-variant font-code-sm">
+<span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-error animate-ping"></span>CWC Critical Gauge</span>
+<span>1:25,000</span>
+</div>
+</div>
+</div>
+<!-- Map Administrative Footer Bar -->
+<div class="px-space-sm py-1.5 bg-surface-container-low border-t border-outline-variant flex flex-wrap items-center justify-between text-[11px] font-code-sm text-on-surface-variant">
+<div class="flex items-center gap-space-md">
+<span>COORD: <strong class="text-on-surface">25.2974° N, 91.5828° E</strong></span>
+<span class="hidden sm:inline">SCALE: <strong class="text-on-surface">1:25,000 (Topo Sheet 78 O/11)</strong></span>
+<span>DEM ELEV: <strong class="text-on-surface">1,420m AMSL</strong></span>
+</div>
+<div>
+<span>SOURCE: Survey of India / Meghalaya GIS Data Center (State Node)</span>
+</div>
+</div>
+</div>
+<!-- B. DOWNSTREAM CATCHMENT CASCADE TIMELINE -->
+<div class="bg-surface-container-lowest rounded border border-outline-variant shadow-sm p-space-md flex flex-col gap-space-sm">
+<div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-space-xs border-b border-outline-variant pb-2">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[20px]">water_loss</span>
+<div>
+<h3 class="font-headline-sm text-headline-sm uppercase tracking-tight text-on-surface">
+                Catchment Cascade &amp; Hydrological Propagation Timeline (Wahrew Catchment)
+              </h3>
+<p class="font-code-sm text-code-sm text-on-surface-variant">
+                Model: 2D HEC-RAS Hydro-DEM Runoff | Validated Lead-Time Accuracy: 88.4%
+              </p>
+</div>
+</div>
+<div class="flex items-center gap-1 font-code-sm text-code-sm px-2 py-1 rounded bg-error-container text-on-error-container border border-error font-bold">
+<span class="material-symbols-outlined text-[16px]">alarm</span>
+<span>PEAK SURGE IN 35 MIN</span>
+</div>
+</div>
+<!-- Visual Propagation Pipeline (4 interconnected nodes) -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-space-sm relative pt-1">
+<!-- Node 1: Sensor Trigger -->
+<div class="bg-surface-container-low rounded border-l-4 border-error p-space-sm border border-outline-variant flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps uppercase text-error">Upstream Trigger</span>
+<span class="px-1.5 py-0.2 rounded bg-error text-on-error font-code-sm text-[10px] font-bold">11:25 AM</span>
+</div>
+<div class="my-1.5">
+<div class="font-body-sm font-bold text-on-surface">Wahrew Upper Reach</div>
+<div class="font-code-sm text-code-sm text-error font-bold">Level: 2.80 m (+0.4m/hr)</div>
+<div class="font-code-sm text-[11px] text-on-surface-variant">Inflow Surge Detected</div>
+</div>
+<div class="text-[10px] font-code-sm text-on-surface-variant border-t border-surface-container pt-1">
+              Sensor #A: 100% Reliability
+            </div>
+</div>
+<!-- Node 2: Gorge Runoff Gauge -->
+<div class="bg-surface-container-low rounded border-l-4 border-amber-600 p-space-sm border border-outline-variant flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps uppercase text-amber-700">Catchment Funnel</span>
+<span class="font-code-sm text-[10px] text-on-surface-variant">11:38 AM</span>
+</div>
+<div class="my-1.5">
+<div class="font-body-sm font-bold text-on-surface">River Gauge Gorge</div>
+<div class="font-code-sm text-code-sm text-on-surface font-semibold">Saturation: 82% (NASA SMAP)</div>
+<div class="font-code-sm text-[11px] text-amber-700 font-semibold">Surge Velocity: 4.2 m/s</div>
+</div>
+<div class="text-[10px] font-code-sm text-on-surface-variant border-t border-surface-container pt-1">
+              Runoff Coefficient: 0.91 (Sheetflow)
+            </div>
+</div>
+<!-- Node 3: Village Cluster B (Target of Action) -->
+<div class="bg-error-container/30 rounded border-2 border-error p-space-sm flex flex-col justify-between shadow-sm relative">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps uppercase text-error font-bold">Impact Zone A-1</span>
+<span class="px-1.5 py-0.2 rounded bg-error text-on-error font-code-sm text-[10px] font-bold">ETA: 35 MIN</span>
+</div>
+<div class="my-1.5">
+<div class="font-body-sm font-bold text-error">Mawsynram Lowlands</div>
+<div class="font-code-sm text-code-sm text-on-error-container font-bold">Projected Peak: 12:17 PM</div>
+<div class="font-body-sm text-[12px] font-bold text-on-surface">Pop at Risk: 4,200 Persons</div>
+</div>
+<div class="text-[10px] font-code-sm text-error font-bold border-t border-error/30 pt-1">
+              CRITICAL: Bridge Causeway Overtopping
+            </div>
+</div>
+<!-- Node 4: Downstream Plain Sector C -->
+<div class="bg-surface-container-low rounded border-l-4 border-secondary p-space-sm border border-outline-variant flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps uppercase text-secondary">Downstream Plains</span>
+<span class="px-1.5 py-0.2 rounded bg-surface-container text-on-surface-variant font-code-sm text-[10px] font-semibold">ETA: 52 MIN</span>
+</div>
+<div class="my-1.5">
+<div class="font-body-sm font-bold text-on-surface">Shella Border Plains</div>
+<div class="font-code-sm text-code-sm text-on-surface font-semibold">Projected Peak: 12:34 PM</div>
+<div class="font-body-sm text-[12px] text-on-surface-variant">Pop at Risk: 1,850 Persons</div>
+</div>
+<div class="text-[10px] font-code-sm text-on-surface-variant border-t border-surface-container pt-1">
+              SDMA Liaison Inundation Alert Issued
+            </div>
+</div>
+</div>
+</div>
+</div>
+<!-- RIGHT COMMAND PANEL (4 cols): OPERATIONAL DECISION SUPPORT & ACTION UNITS -->
+<div class="xl:col-span-4 flex flex-col gap-space-md">
+<!-- A. SELECTED SECTOR RISK ANALYSIS CARD -->
+<div class="bg-surface-container-lowest rounded border border-outline-variant shadow-sm overflow-hidden">
+<div class="p-space-sm bg-surface-container-low border-b border-outline-variant flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-error text-[18px]">emergency_home</span>
+<span class="font-headline-sm text-headline-sm uppercase text-on-surface">Sector Analysis</span>
+</div>
+<span class="px-2 py-0.5 rounded bg-error text-on-error font-label-caps text-[10px] font-bold animate-pulse">
+            EVACUATION ADVISORY
+          </span>
+</div>
+<div class="p-space-sm flex flex-col gap-space-sm">
+<div>
+<div class="font-headline-sm text-headline-sm font-bold text-on-surface">Mawsynram Cluster (Ward 2 &amp; 4)</div>
+<div class="font-code-sm text-code-sm text-on-surface-variant">Administrative Division: East Khasi Hills District</div>
+</div>
+<!-- High Density Metrics Grid -->
+<div class="grid grid-cols-2 gap-space-xs">
+<div class="p-2 bg-surface-container-low rounded border border-outline-variant">
+<div class="font-label-caps text-[10px] uppercase text-on-surface-variant">Flash Flood Prob.</div>
+<div class="font-label-metric text-[20px] text-error font-bold">78%</div>
+<div class="font-code-sm text-[10px] text-error font-semibold">Critical Threshold (65%)</div>
+</div>
+<div class="p-2 bg-surface-container-low rounded border border-outline-variant">
+<div class="font-label-caps text-[10px] uppercase text-on-surface-variant">Slope Failure Risk</div>
+<div class="font-label-metric text-[20px] text-amber-700 font-bold">42%</div>
+<div class="font-code-sm text-[10px] text-amber-700 font-semibold">Warning (Zone 4)</div>
+</div>
+<div class="p-2 bg-surface-container-low rounded border border-outline-variant">
+<div class="font-label-caps text-[10px] uppercase text-on-surface-variant">River Gauge Level</div>
+<div class="font-label-metric text-[20px] text-error font-bold">2.8 m</div>
+<div class="font-code-sm text-[10px] text-on-surface-variant">Danger Mark: 2.2 m</div>
+</div>
+<div class="p-2 bg-surface-container-low rounded border border-outline-variant">
+<div class="font-label-caps text-[10px] uppercase text-on-surface-variant">Rainfall Rate (AWS)</div>
+<div class="font-label-metric text-[20px] text-primary font-bold">64 mm/h</div>
+<div class="font-code-sm text-[10px] text-primary font-semibold">Cloudburst Threshold</div>
+</div>
+<div class="p-2 bg-surface-container-low rounded border border-outline-variant">
+<div class="font-label-caps text-[10px] uppercase text-on-surface-variant">Soil Moisture (SMAP)</div>
+<div class="font-label-metric text-[20px] text-on-surface font-bold">82%</div>
+<div class="font-code-sm text-[10px] text-error font-semibold">Zero Infiltration Room</div>
+</div>
+<div class="p-2 bg-surface-container-low rounded border border-outline-variant">
+<div class="font-label-caps text-[10px] uppercase text-on-surface-variant">Est. Lead Time</div>
+<div class="font-label-metric text-[20px] text-error font-bold">45 min</div>
+<div class="font-code-sm text-[10px] text-on-surface-variant">To Inundation Peak</div>
+</div>
+</div>
+<!-- Plain Language Officer Briefing Box -->
+<div class="p-space-sm bg-surface-container rounded border-l-4 border-primary text-body-sm text-on-surface flex flex-col gap-1">
+<div class="font-label-caps text-[10px] uppercase text-primary font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">info</span>
+              Duty Officer Situation Briefing
+            </div>
+<p class="leading-relaxed text-[12px]">
+              "Intense convective cloudburst localized over Mawsynram ridge (64 mm/hr). Upper soil horizon fully saturated (82%); rainwater cannot infiltrate, creating immediate sheet-wash runoff into Wahrew gorge. Downstream inundation expected at bridge causeway within 35 minutes."
+            </p>
+</div>
+<div class="flex items-center gap-space-xs pt-1">
+<button class="flex-1 h-8 px-2 bg-error hover:bg-red-800 text-on-error rounded font-body-sm text-body-sm font-semibold transition-colors flex items-center justify-center gap-1 shadow-sm">
+<span class="material-symbols-outlined text-[16px]">campaign</span>
+              Issue Sector Red Alert
+            </button>
+<button class="h-8 px-3 bg-surface-container-lowest border border-outline-variant hover:bg-surface-container rounded font-body-sm text-body-sm text-on-surface transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">share</span>
+              Relay SDMA
+            </button>
+</div>
+</div>
+</div>
+<!-- B. NDRF DEPLOYMENT PRIORITY PANEL (AI-Assisted Decision Support) -->
+<div class="bg-surface-container-lowest rounded border border-outline-variant shadow-sm overflow-hidden flex flex-col">
+<div class="p-space-sm bg-surface-container-low border-b border-outline-variant flex flex-col gap-0.5">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[18px]">verified_user</span>
+<span class="font-headline-sm text-headline-sm uppercase text-on-surface tracking-tight">NDRF Deployment Decision Engine</span>
+</div>
+<span class="px-1.5 py-0.5 rounded bg-primary-container text-on-primary font-code-sm text-[10px] font-bold">ACT-2</span>
+</div>
+<span class="font-code-sm text-[10px] text-on-surface-variant leading-tight">
+            AI-assisted recommendation. Designed for NDRF workflow. Final deployment decision remains strictly with authorized statutory officials.
+          </span>
+</div>
+<div class="p-space-sm flex flex-col gap-space-sm">
+<!-- Recommendation Card 1 (Priority 1 - High Urgency) -->
+<div class="rounded border-2 border-error bg-error-container/10 p-space-sm flex flex-col gap-space-xs shadow-sm">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-1">
+<span class="px-1.5 py-0.5 rounded bg-error text-on-error font-code-sm text-[10px] font-bold">PRIORITY 1</span>
+<span class="font-headline-sm text-[14px] font-bold text-on-surface">Mawsynram Cluster</span>
+</div>
+<span class="font-code-sm text-code-sm font-bold text-error">28 MIN REMAINING</span>
+</div>
+<div class="grid grid-cols-2 gap-1 text-[11px] font-code-sm text-on-surface-variant">
+<div>Exposed Pop: <strong class="text-on-surface">4,200</strong></div>
+<div>Road Access: <strong class="text-secondary font-bold">OPEN (NH-6 Feeder)</strong></div>
+<div>Nearest Unit: <strong class="text-on-surface">1st Bn Shillong Base</strong></div>
+<div>Transit ETA: <strong class="text-error font-bold">42 min</strong></div>
+</div>
+<div class="p-1.5 bg-surface-container-lowest rounded border border-outline-variant text-[11px] font-body-sm text-on-surface">
+<strong class="text-primary">Recommended Action:</strong> Pre-position Team Alpha (25 personnel, 4 motorized OBM boats, dewatering pumps, power-cutting tools).
+            </div>
+<div class="flex items-center gap-1 pt-1">
+<button class="flex-1 h-7 px-2 bg-primary hover:bg-blue-900 text-on-primary rounded font-body-sm text-[12px] font-semibold transition-colors flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-[14px]">task_alt</span>
+                Assign Team Alpha
+              </button>
+<button class="h-7 px-2 bg-surface-container-lowest border border-outline hover:bg-surface-container rounded font-body-sm text-[11px] text-on-surface">
+                Nav Route
+              </button>
+<button class="h-7 px-2 bg-surface-container-lowest border border-outline hover:bg-surface-container rounded font-body-sm text-[11px] text-on-surface">
+                Manifest
+              </button>
+</div>
+</div>
+<!-- Recommendation Card 2 (Priority 2 - Secondary Watch) -->
+<div class="rounded border border-outline-variant bg-surface-container-low p-space-sm flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-1">
+<span class="px-1.5 py-0.5 rounded bg-amber-600 text-white font-code-sm text-[10px] font-bold">PRIORITY 2</span>
+<span class="font-headline-sm text-[14px] font-bold text-on-surface">Sohra (Cherra) Valley</span>
+</div>
+<span class="font-code-sm text-code-sm font-semibold text-amber-700">56 MIN LEAD TIME</span>
+</div>
+<div class="grid grid-cols-2 gap-1 text-[11px] font-code-sm text-on-surface-variant">
+<div>Exposed Pop: <strong class="text-on-surface">2,100</strong></div>
+<div>Transit ETA: <strong class="text-on-surface">50 min</strong></div>
+</div>
+<div class="p-1.5 bg-surface-container-lowest rounded border border-outline-variant text-[11px] font-body-sm text-on-surface">
+<strong class="text-on-surface">Recommended Action:</strong> Alert Team Bravo on 15-min standby; coordinate with local Village Disaster Management Committee (VDMC).
+            </div>
+<div class="flex items-center gap-1 pt-1">
+<button class="flex-1 h-7 px-2 bg-surface-container-lowest border border-outline hover:bg-surface-container text-on-surface rounded font-body-sm text-[12px] font-semibold transition-colors flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-[14px]">timer</span>
+                Put on Standby (Bravo)
+              </button>
+<button class="h-7 px-2 bg-surface-container-lowest border border-outline hover:bg-surface-container rounded font-body-sm text-[11px] text-on-surface">
+                Route Assessment
+              </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- 3. LOWER OPERATIONAL MATRICES (3-Column Government Administrative Grid) -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-space-md">
+<!-- COLUMN 1: ROAD ACCESSIBILITY & EVACUATION CORRIDORS -->
+<div class="bg-surface-container-lowest rounded border border-outline-variant shadow-sm flex flex-col overflow-hidden">
+<div class="p-space-sm bg-surface-container-low border-b border-outline-variant flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[18px]">traffic</span>
+<span class="font-headline-sm text-headline-sm uppercase text-on-surface tracking-tight">Road Accessibility Corridors</span>
+</div>
+<span class="font-code-sm text-[10px] text-on-surface-variant">PWD &amp; NHAI FEED</span>
+</div>
+<div class="p-space-sm overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container border-b-2 border-outline-variant text-on-surface-variant font-label-caps text-[10px]">
+<th class="py-1.5 px-2">Corridor / Artery</th>
+<th class="py-1.5 px-2">Status</th>
+<th class="py-1.5 px-2">Risk</th>
+<th class="py-1.5 px-2 text-right">Transit</th>
+</tr>
+</thead>
+<tbody class="font-code-sm text-[11px] divide-y divide-surface-container">
+<tr class="hover:bg-surface-container-low">
+<td class="py-2 px-2 font-medium text-on-surface">NH-6 (Guwahati-Shillong-Jowai)</td>
+<td class="py-2 px-2">
+<span class="px-1.5 py-0.5 rounded bg-green-100 text-green-800 border border-green-300 font-bold text-[10px]">OPEN</span>
+</td>
+<td class="py-2 px-2 text-on-surface-variant">Medium</td>
+<td class="py-2 px-2 text-right font-bold text-on-surface">32 min</td>
+</tr>
+<tr class="bg-red-50/50 hover:bg-red-50">
+<td class="py-2 px-2 font-bold text-error">
+                SH-11 (Cherra-Mawsynram Link)
+                <div class="text-[9px] text-error font-normal">Landslide Km 18 (DoR on route)</div>
+</td>
+<td class="py-2 px-2">
+<span class="px-1.5 py-0.5 rounded bg-error text-on-error font-bold text-[10px]">BLOCKED</span>
+</td>
+<td class="py-2 px-2 text-error font-bold">Critical</td>
+<td class="py-2 px-2 text-right font-bold text-error">CUT OFF</td>
+</tr>
+<tr class="hover:bg-surface-container-low">
+<td class="py-2 px-2 font-medium text-on-surface">
+                MDR-M02 (Mawsynram Valley Road)
+                <div class="text-[9px] text-amber-700 font-normal">Culvert overflow near mile 9</div>
+</td>
+<td class="py-2 px-2">
+<span class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-900 border border-amber-300 font-bold text-[10px]">AT RISK</span>
+</td>
+<td class="py-2 px-2 text-amber-700 font-bold">High</td>
+<td class="py-2 px-2 text-right font-bold text-on-surface">18 min</td>
+</tr>
+<tr class="hover:bg-surface-container-low">
+<td class="py-2 px-2 font-medium text-on-surface">Shella Border Patrol Road</td>
+<td class="py-2 px-2">
+<span class="px-1.5 py-0.5 rounded bg-green-100 text-green-800 border border-green-300 font-bold text-[10px]">OPEN</span>
+</td>
+<td class="py-2 px-2 text-on-surface-variant">Low</td>
+<td class="py-2 px-2 text-right font-bold text-on-surface">45 min</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="p-space-sm bg-surface-container-low border-t border-outline-variant flex items-center justify-between text-[11px] font-body-sm">
+<span class="text-on-surface-variant font-code-sm">Detour: Via Mawphlang Bypass (Open)</span>
+<button class="text-primary hover:underline font-semibold font-code-sm">Full Road Log →</button>
+</div>
+</div>
+<!-- COLUMN 2: AVAILABLE RESOURCES & SHELTER CAPACITY -->
+<div class="bg-surface-container-lowest rounded border border-outline-variant shadow-sm flex flex-col overflow-hidden">
+<div class="p-space-sm bg-surface-container-low border-b border-outline-variant flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[18px]">inventory</span>
+<span class="font-headline-sm text-headline-sm uppercase text-on-surface tracking-tight">Resources &amp; Shelter Fleet</span>
+</div>
+<span class="font-code-sm text-[10px] text-on-surface-variant">DDMA STORES</span>
+</div>
+<div class="p-space-sm flex flex-col gap-space-xs">
+<!-- Resource Table -->
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container border-b-2 border-outline-variant text-on-surface-variant font-label-caps text-[10px]">
+<th class="py-1.5 px-2">Asset Type</th>
+<th class="py-1.5 px-2 text-center">Total</th>
+<th class="py-1.5 px-2 text-center">Allocated</th>
+<th class="py-1.5 px-2 text-right">Available</th>
+</tr>
+</thead>
+<tbody class="font-code-sm text-[11px] divide-y divide-surface-container">
+<tr>
+<td class="py-1.5 px-2 font-medium">NDRF Disaster Teams</td>
+<td class="py-1.5 px-2 text-center">05</td>
+<td class="py-1.5 px-2 text-center text-primary font-bold">02</td>
+<td class="py-1.5 px-2 text-right font-bold text-secondary">03 Ready</td>
+</tr>
+<tr>
+<td class="py-1.5 px-2 font-medium">Inflatable Boats (OBMs)</td>
+<td class="py-1.5 px-2 text-center">12</td>
+<td class="py-1.5 px-2 text-center text-primary font-bold">04</td>
+<td class="py-1.5 px-2 text-right font-bold text-secondary">08 Ready</td>
+</tr>
+<tr>
+<td class="py-1.5 px-2 font-medium">Rescue &amp; 4x4 QRV Trucks</td>
+<td class="py-1.5 px-2 text-center">08</td>
+<td class="py-1.5 px-2 text-center text-primary font-bold">03</td>
+<td class="py-1.5 px-2 text-right font-bold text-secondary">05 Ready</td>
+</tr>
+<tr>
+<td class="py-1.5 px-2 font-medium">Mobile Medical Units</td>
+<td class="py-1.5 px-2 text-center">06</td>
+<td class="py-1.5 px-2 text-center text-primary font-bold">02</td>
+<td class="py-1.5 px-2 text-right font-bold text-secondary">04 Ready</td>
+</tr>
+</tbody>
+</table>
+<!-- Shelter Capacity Visual Bar -->
+<div class="p-2 bg-surface-container rounded border border-outline-variant flex flex-col gap-1 mt-1">
+<div class="flex items-center justify-between font-label-caps text-[10px] uppercase text-on-surface">
+<span>Shelter Capacity (East Khasi Hills)</span>
+<span class="font-code-sm font-bold text-primary">1,240 / 8,400 Occupied (14.7%)</span>
+</div>
+<div class="w-full bg-surface-container-high h-2.5 rounded-full overflow-hidden flex">
+<div class="bg-primary h-full" style="width: 15%"></div>
+<div class="bg-secondary h-full" style="width: 85%"></div>
+</div>
+<div class="flex items-center justify-between text-[10px] font-code-sm text-on-surface-variant">
+<span>Occupied: 1,240</span>
+<span class="text-secondary font-bold">7,160 Vacant Remaining</span>
+</div>
+</div>
+<div class="flex items-center gap-1 pt-1">
+<button class="flex-1 h-7 px-2 bg-surface-container-lowest border border-outline hover:bg-surface-container rounded font-body-sm text-[11px] text-on-surface transition-colors flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-[14px]">local_shipping</span>
+            Dispatch Stores
+          </button>
+<button class="h-7 px-2 bg-surface-container-lowest border border-outline hover:bg-surface-container rounded font-body-sm text-[11px] text-primary font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">flight</span>
+            Request Air Recon (IAF)
+          </button>
+</div>
+</div>
+</div>
+<!-- COLUMN 3: CITIZEN GROUND VERIFICATION & SITREP GENERATOR -->
+<div class="bg-surface-container-lowest rounded border border-outline-variant shadow-sm flex flex-col overflow-hidden">
+<div class="p-space-sm bg-surface-container-low border-b border-outline-variant flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[18px]">verified</span>
+<span class="font-headline-sm text-headline-sm uppercase text-on-surface tracking-tight">Citizen Ground Reports</span>
+</div>
+<span class="px-1.5 py-0.2 rounded bg-error-container text-on-error-container font-code-sm text-[10px] font-bold">2 PENDING</span>
+</div>
+<div class="p-space-sm flex flex-col gap-space-xs flex-1">
+<!-- Queue Item 1 -->
+<div class="p-2 bg-surface-container-low rounded border border-outline-variant flex flex-col gap-1">
+<div class="flex items-center justify-between font-code-sm text-[10px]">
+<span class="font-bold text-on-surface">10:42 AM | Mawsynram Market</span>
+<span class="px-1.5 py-0.2 rounded bg-amber-100 text-amber-800 font-bold">REVIEW PENDING</span>
+</div>
+<div class="flex gap-2 items-center">
+<div class="w-10 h-10 rounded bg-surface-container border border-outline flex items-center justify-center flex-shrink-0 text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px]">image</span>
+</div>
+<p class="font-body-sm text-[12px] text-on-surface leading-tight">
+              "Rapid water rise near bridge culvert. Drain water overflowing onto marketplace road."
+            </p>
+</div>
+<div class="flex items-center gap-1 justify-end pt-1 border-t border-surface-container">
+<button class="h-6 px-2 bg-secondary text-on-secondary rounded font-code-sm text-[10px] font-bold hover:bg-teal-800">
+              Verify
+            </button>
+<button class="h-6 px-2 bg-surface-container-lowest border border-outline rounded font-code-sm text-[10px] text-on-surface hover:bg-surface-container">
+              Reject
+            </button>
+<button class="h-6 px-2 bg-error text-on-error rounded font-code-sm text-[10px] font-bold hover:bg-red-800">
+              Escalate
+            </button>
+</div>
+</div>
+<!-- Queue Item 2 -->
+<div class="p-2 bg-surface-container-low rounded border border-outline-variant flex flex-col gap-1">
+<div class="flex items-center justify-between font-code-sm text-[10px]">
+<span class="font-bold text-on-surface">10:51 AM | Sohra East Feeder</span>
+<span class="px-1.5 py-0.2 rounded bg-green-100 text-green-800 font-bold">VERIFIED</span>
+</div>
+<div class="flex gap-2 items-center">
+<div class="w-10 h-10 rounded bg-surface-container border border-outline flex items-center justify-center flex-shrink-0 text-secondary">
+<span class="material-symbols-outlined text-[20px]">check_circle</span>
+</div>
+<p class="font-body-sm text-[12px] text-on-surface leading-tight">
+              "Mudslide debris on bypass road. JCB bulldozer requested by local headman."
+            </p>
+</div>
+</div>
+<!-- SitRep Generator Quick Banner -->
+<div class="p-space-sm bg-primary/5 rounded border border-primary/20 flex flex-col gap-1 mt-auto">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-[10px] uppercase text-primary font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">description</span>
+              Situation Report Draft #04 Ready
+            </span>
+<span class="font-code-sm text-[10px] text-on-surface-variant">NIC FORMAT</span>
+</div>
+<p class="font-code-sm text-[11px] text-on-surface leading-tight">
+            Generated from 7/8 connected feeds, IMD AWS radar telemetry &amp; 3 active alert zones.
+          </p>
+<div class="flex items-center gap-1 pt-1">
+<button class="flex-1 h-7 px-2 bg-primary hover:bg-blue-900 text-on-primary rounded font-body-sm text-[11px] font-semibold transition-colors flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-[14px]">edit_document</span>
+              Generate SitRep
+            </button>
+<button class="h-7 px-2 bg-surface-container-lowest border border-outline hover:bg-surface-container rounded font-body-sm text-[11px] text-on-surface flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">download</span>
+              PDF (NIC)
+            </button>
+</div>
+<span class="font-code-sm text-[9px] text-on-surface-variant italic">
+            *Draft generated from system data — statutory officer sign-off mandatory before transmission.
+          </span>
+</div>
+</div>
+</div>
+</div>
+</div></div></main></div></body></html>

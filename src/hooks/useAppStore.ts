@@ -1,0 +1,173 @@
+import { create } from 'zustand';
+import type { Sensor } from '../types/hydrology';
+import type { VillageRisk, RiskLevel } from '../types/risk';
+import type { Alert } from '../types/alerts';
+import type { CitizenReport, Road } from '../types/reports';
+import type { NDRFTeam, DeploymentRecommendation } from '../types/alerts';
+import { mockSensors } from '../data/mock/sensors';
+import { mockVillages } from '../data/mock/villages';
+import { mockAlerts, mockRoads } from '../data/mock/alerts';
+import { mockNDRFTeams, mockDeploymentRecommendations, mockCitizenReports } from '../data/mock/ndrfTeams';
+import type { UserRole } from '../types/reports';
+
+export interface ApiEndpoint {
+  id: string;
+  name: string;
+  url: string;
+  status: 'CONNECTED' | 'DISCONNECTED' | 'ERROR';
+  lastSync: string;
+}
+
+interface AppState {
+  // Sensor data
+  sensors: Sensor[];
+  updateSensors: (sensors: Sensor[]) => void;
+
+  // Village risk
+  villages: VillageRisk[];
+  updateVillages: (villages: VillageRisk[]) => void;
+
+  // Alerts
+  alerts: Alert[];
+  updateAlerts: (alerts: Alert[]) => void;
+  acknowledgeAlert: (id: string) => void;
+  resolveAlert: (id: string) => void;
+
+  // Roads
+  roads: Road[];
+
+  // NDRF
+  ndrfTeams: NDRFTeam[];
+  deploymentRecommendations: DeploymentRecommendation[];
+
+  // Citizen reports
+  citizenReports: CitizenReport[];
+  addCitizenReport: (report: CitizenReport) => void;
+
+  // User
+  currentRole: UserRole;
+  setRole: (role: UserRole) => void;
+
+  // Simulation
+  isSimulating: boolean;
+  simulationPhase: number; // 0=normal, 1=escalating, 2=critical
+  startSimulation: () => void;
+  stopSimulation: () => void;
+  advanceSimulation: () => void;
+
+  // Connectivity
+  isOnline: boolean;
+  setOnline: (online: boolean) => void;
+
+  // Sync time
+  lastSync: string;
+  updateLastSync: () => void;
+
+  // Admin Auth & Config
+  isAdminAuthenticated: boolean;
+  setAdminAuthenticated: (auth: boolean) => void;
+  
+  apiEndpoints: ApiEndpoint[];
+  toggleEndpointStatus: (id: string) => void;
+  updateEndpointUrl: (id: string, url: string) => void;
+  forceSyncEndpoint: (id: string) => void;
+}
+
+const initialEndpoints: ApiEndpoint[] = [
+  { id: 'ep-1', name: 'IMD Radar API (Sohra)', url: 'https://api.imd.gov.in/v1/radar/shillong', status: 'CONNECTED', lastSync: '1 min ago' },
+  { id: 'ep-2', name: 'CWC Hydrology Feed (Wahrew)', url: 'https://indiawater.gov.in/api/v2/gauge/wahrew', status: 'CONNECTED', lastSync: '5 mins ago' },
+  { id: 'ep-3', name: 'State PWD Road Status', url: 'https://pwd.meghalaya.gov.in/api/status/sh-11', status: 'CONNECTED', lastSync: '12 mins ago' },
+  { id: 'ep-4', name: 'NDRF Deployment Hook', url: 'https://ndrf.gov.in/webhook/deployments', status: 'CONNECTED', lastSync: 'Just now' },
+];
+
+export const useAppStore = create<AppState>((set, get) => ({
+  sensors: mockSensors,
+  updateSensors: (sensors) => set({ sensors }),
+
+  villages: mockVillages,
+  updateVillages: (villages) => set({ villages }),
+
+  alerts: mockAlerts,
+  updateAlerts: (alerts) => set({ alerts }),
+  acknowledgeAlert: (id) => set((state) => ({
+    alerts: state.alerts.map((a) => a.id === id ? { ...a, status: 'ACKNOWLEDGED' as const, acknowledgedBy: 'Current Officer', acknowledgedAt: new Date().toISOString() } : a),
+  })),
+  resolveAlert: (id) => set((state) => ({
+    alerts: state.alerts.map((a) => a.id === id ? { ...a, status: 'RESOLVED' as const } : a),
+  })),
+
+  roads: mockRoads,
+
+  ndrfTeams: mockNDRFTeams,
+  deploymentRecommendations: mockDeploymentRecommendations,
+
+  citizenReports: mockCitizenReports,
+  addCitizenReport: (report) => set((state) => ({
+    citizenReports: [report, ...state.citizenReports],
+  })),
+
+  currentRole: 'DISTRICT_EMERGENCY_OFFICER',
+  setRole: (role) => set({ currentRole: role }),
+
+  isSimulating: true,
+  simulationPhase: 0,
+  startSimulation: () => set({ isSimulating: true }),
+  stopSimulation: () => set({ isSimulating: false }),
+  advanceSimulation: () => {
+    const state = get();
+    const phase = Math.min(state.simulationPhase + 1, 2);
+
+    // Simulate sensor changes
+    const sensors = state.sensors.map((s) => {
+      let delta = (Math.random() - 0.3) * 3;
+      if (phase >= 1) delta = Math.abs(delta) * (1 + phase * 0.5);
+      const newValue = Math.max(0, +(s.value + delta).toFixed(1));
+      const newStatus = newValue > s.threshold * 0.9 ? 'warning' as const : newValue > s.threshold ? 'warning' as const : 'online' as const;
+      return { ...s, previousValue: s.value, value: newValue, status: newStatus, updatedAt: new Date().toISOString() };
+    });
+
+    // Simulate village risk changes
+    const villages = state.villages.map((v) => {
+      const boost = phase * 0.05;
+      const newFlood = Math.min(0.99, v.floodProbability + (Math.random() - 0.3) * 0.03 + boost);
+      const newSlope = Math.min(0.99, v.slopeProbability + (Math.random() - 0.3) * 0.02 + boost * 0.5);
+      const combined = Math.max(newFlood, newSlope) * 0.7 + Math.min(newFlood, newSlope) * 0.3;
+      let riskLevel: RiskLevel = 'LOW';
+      if (combined >= 0.7) riskLevel = 'VERY_HIGH';
+      else if (combined >= 0.5) riskLevel = 'HIGH';
+      else if (combined >= 0.3) riskLevel = 'MEDIUM';
+      const leadTime = Math.max(15, Math.round(180 * (1 - combined * 0.8)));
+      return { ...v, floodProbability: +newFlood.toFixed(2), slopeProbability: +newSlope.toFixed(2), combinedScore: +combined.toFixed(2), riskLevel, leadTimeMinutes: leadTime, lastUpdated: new Date().toISOString() };
+    });
+
+    set({ sensors, villages, simulationPhase: phase, lastSync: new Date().toISOString() });
+  },
+
+  isOnline: true,
+  setOnline: (online) => set({ isOnline: online }),
+
+  lastSync: new Date().toISOString(),
+  updateLastSync: () => set({ lastSync: new Date().toISOString() }),
+
+  isAdminAuthenticated: false,
+  setAdminAuthenticated: (auth) => set({ isAdminAuthenticated: auth }),
+
+  apiEndpoints: initialEndpoints,
+  toggleEndpointStatus: (id) => set((state) => ({
+    apiEndpoints: state.apiEndpoints.map(ep => 
+      ep.id === id 
+        ? { ...ep, status: ep.status === 'CONNECTED' ? 'DISCONNECTED' : 'CONNECTED' }
+        : ep
+    )
+  })),
+  updateEndpointUrl: (id, url) => set((state) => ({
+    apiEndpoints: state.apiEndpoints.map(ep => 
+      ep.id === id ? { ...ep, url } : ep
+    )
+  })),
+  forceSyncEndpoint: (id) => set((state) => ({
+    apiEndpoints: state.apiEndpoints.map(ep => 
+      ep.id === id ? { ...ep, lastSync: 'Just now' } : ep
+    )
+  })),
+}));
