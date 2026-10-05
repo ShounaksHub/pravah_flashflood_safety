@@ -1,4 +1,4 @@
-import { Bell } from 'lucide-react';
+import { Bell, LogOut } from 'lucide-react';
 import { APP_NAME, APP_SUBTITLE, PROBLEM_STATEMENT, JURISDICTION } from '../../data/constants';
 import { useAppStore } from '../../hooks/useAppStore';
 import { formatTime } from '../../utils/formatting';
@@ -12,7 +12,7 @@ const ROLE_LABELS: Record<UserRole, string> = {
 };
 
 export default function TopBar() {
-  const { currentRole, setRole, alerts, sensors, lastSync, isOnline } = useAppStore();
+  const { currentRole, setRole, alerts, sensors, lastSync, isOnline, currentUser, logout } = useAppStore();
   const activeAlerts = alerts.filter((a) => a.status === 'ACTIVE').length;
   const onlineSensors = sensors.filter((s) => s.status !== 'offline').length;
 
@@ -60,10 +60,10 @@ export default function TopBar() {
           <div className="px-2 py-0.5 rounded bg-surface-container-high text-on-surface-variant text-label-caps border border-outline uppercase">Demo Data</div>
         </div>
 
-        {/* Right: Role + Notifications */}
-        <div className="flex items-center gap-3">
+        {/* Right: Role + Notifications + User Avatar & Logout */}
+        <div className="flex items-center gap-2.5">
           <select
-            className="h-8 px-2 bg-surface-container-low border border-outline-variant rounded text-body-sm text-on-surface focus:outline-none focus:border-primary"
+            className="h-8 px-2 bg-surface-container-low border border-outline-variant rounded text-body-sm text-on-surface focus:outline-none focus:border-primary font-medium"
             value={currentRole}
             onChange={(e) => setRole(e.target.value as UserRole)}
           >
@@ -71,15 +71,38 @@ export default function TopBar() {
               <option key={key} value={key}>{label}</option>
             ))}
           </select>
+
           <button className="relative h-8 w-8 rounded border border-outline-variant bg-surface-container-low flex items-center justify-center text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors">
             <Bell size={16} />
             {activeAlerts > 0 && (
               <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-error text-on-error text-[10px] leading-none flex items-center justify-center font-bold">{activeAlerts}</span>
             )}
           </button>
-          <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-on-primary text-sm font-bold">
-            RL
+
+          {/* Active Officer Identity */}
+          <div className="flex items-center gap-2 pl-2 border-l border-outline-variant">
+            <div className="w-8 h-8 rounded bg-primary flex items-center justify-center text-on-primary text-xs font-bold shadow-sm flex-shrink-0">
+              {currentUser?.avatarInitials || 'RL'}
+            </div>
+            <div className="hidden sm:flex flex-col">
+              <span className="text-[12px] font-bold text-on-surface truncate max-w-[120px]">
+                {currentUser?.name.split(',')[0] || 'Shri R. Lyngdoh'}
+              </span>
+              <span className="text-[10px] font-mono text-primary font-semibold">
+                {currentUser?.role === 'DISTRICT_EMERGENCY_OFFICER' ? 'DEO / IAS' : currentUser?.role === 'NDRF_OFFICER' ? 'NDRF CO' : currentUser?.role === 'FIELD_OFFICER' ? 'Field Lead' : 'Superadmin'}
+              </span>
+            </div>
           </div>
+
+          {/* Logout / Switch Role Button */}
+          <button
+            onClick={logout}
+            title="Switch Operational Role / Logout"
+            className="h-8 px-2.5 bg-surface-container-low hover:bg-[#ffdad6] text-[#ba1a1a] rounded border border-outline-variant text-[11px] font-bold transition-colors flex items-center gap-1 shadow-sm"
+          >
+            <LogOut size={13} />
+            <span className="hidden md:inline">Switch Role</span>
+          </button>
         </div>
       </div>
     </header>

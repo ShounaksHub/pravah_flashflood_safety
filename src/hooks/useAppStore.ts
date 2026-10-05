@@ -8,6 +8,7 @@ import { mockSensors } from '../data/mock/sensors';
 import { mockVillages } from '../data/mock/villages';
 import { mockAlerts, mockRoads } from '../data/mock/alerts';
 import { mockNDRFTeams, mockDeploymentRecommendations, mockCitizenReports } from '../data/mock/ndrfTeams';
+import { DEMO_ACCOUNTS, type DemoAccount } from '../data/mock/demoAccounts';
 import type { UserRole } from '../types/reports';
 
 export interface ApiEndpoint {
@@ -44,7 +45,11 @@ interface AppState {
   citizenReports: CitizenReport[];
   addCitizenReport: (report: CitizenReport) => void;
 
-  // User
+  // User & Auth
+  isAuthenticated: boolean;
+  currentUser: DemoAccount | null;
+  login: (account: DemoAccount) => void;
+  logout: () => void;
   currentRole: UserRole;
   setRole: (role: UserRole) => void;
 
@@ -106,8 +111,28 @@ export const useAppStore = create<AppState>((set, get) => ({
     citizenReports: [report, ...state.citizenReports],
   })),
 
+  isAuthenticated: false,
+  currentUser: null,
   currentRole: 'DISTRICT_EMERGENCY_OFFICER',
-  setRole: (role) => set({ currentRole: role }),
+  login: (account) => set({
+    isAuthenticated: true,
+    currentUser: account,
+    currentRole: account.role,
+    isAdminAuthenticated: account.role === 'ADMIN',
+  }),
+  logout: () => set({
+    isAuthenticated: false,
+    currentUser: null,
+    isAdminAuthenticated: false,
+  }),
+  setRole: (role) => {
+    const matchedAccount = DEMO_ACCOUNTS.find(a => a.role === role) || null;
+    set({
+      currentRole: role,
+      currentUser: matchedAccount,
+      isAdminAuthenticated: role === 'ADMIN',
+    });
+  },
 
   isSimulating: true,
   simulationPhase: 0,
